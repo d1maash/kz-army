@@ -21,7 +21,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
             <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
                 <Link href="/">О программе</Link>
                 <Link href="#">Подача заявки</Link>
-                <Link href="#">Статьи</Link>
+                <Link href="/article">Статьи</Link>
                 <Link href="/faq">FAQ</Link>
             </div>
             <div className="hidden md:flex gap-3">
@@ -54,7 +54,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     <Link href="#" onClick={toggleMenu}>
                         Подача заявки
                     </Link>
-                    <Link href="#" onClick={toggleMenu}>
+                    <Link href="/article" onClick={toggleMenu}>
                         Статьи
                     </Link>
                     <Link href="/faq" onClick={toggleMenu}>
