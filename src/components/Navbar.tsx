@@ -13,9 +13,9 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
     }
 
     return (
-        <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
+        <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-5 lg:px-20 xl:px-28 z-10">
             {/* Logo */}
-            <div className={`font-bold text-lg ${isHome ? 'text-white' : 'text-black'}`}>KZ ARMY</div>
+            <Link href="/" className={`font-bold text-lg ${isHome ? 'text-white' : 'text-black'}`}>ARMY.KZ</Link>
             
             {/* Desktop Links */}
             <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
@@ -48,7 +48,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
 
                 {/* Mobile Links */}
                 <div className="flex flex-col items-center justify-center h-full gap-8 text-custom-yellow font-semibold">
-                    <Link href="#" onClick={toggleMenu}>
+                    <Link href="/" onClick={toggleMenu}>
                         О программе
                     </Link>
                     <Link href="#" onClick={toggleMenu}>
@@ -57,7 +57,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     <Link href="#" onClick={toggleMenu}>
                         Статьи
                     </Link>
-                    <Link href="#" onClick={toggleMenu}>
+                    <Link href="/faq" onClick={toggleMenu}>
                         FAQ
                     </Link>
                     <div className="flex gap-3 mt-6">
