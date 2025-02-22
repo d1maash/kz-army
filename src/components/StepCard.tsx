@@ -9,13 +9,13 @@ interface StepCardType {
 const StepCard = ({ title, description, image }: StepCardType) => {
   return (
     <div className="flex items-center   flex-nowrap gap-5 ml-5">
-        <div className="bg-custom-yellow rounded-xl aspect-square flex justify-center items-center">
+        <div className="bg-custom-yellow aspect-square rounded-xl  flex justify-center items-center">
             <Image 
                 src={image}
                 alt={title}
                 width={40}
                 height={40}
-                className="m-2 mx-3 md:m-5 inline-block aspect-square"
+                className="aspect-square m-2 mx-4 md:m-5 inline-block "
             />
         </div>
         <div className="flex flex-col gap-3">

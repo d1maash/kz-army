@@ -19,14 +19,14 @@ const Navbar = () => {
             
             {/* Desktop Links */}
             <div className="hidden md:flex gap-6 text-custom-yellow font-semibold">
-                <Link href="#">О программе</Link>
+                <Link href="/">О программе</Link>
                 <Link href="#">Подача заявки</Link>
                 <Link href="#">Статьи</Link>
                 <Link href="#">FAQ</Link>
             </div>
             <div className="hidden md:flex gap-3">
-                <button className="bg-custom-yellow text-black px-4 py-1 rounded-md">Войти</button>
-                <button className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">Регистрация</button>
+                <Link href="/auth/login" className="bg-custom-yellow text-black px-4 py-1 rounded-md">Войти</Link>
+                <Link href="/auth/register" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">Регистрация</Link>
             </div>
 
             {/* Mobile Toggle Button */}
@@ -61,12 +61,12 @@ const Navbar = () => {
                         FAQ
                     </Link>
                     <div className="flex gap-3 mt-6">
-                        <button className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">
-                        Войти
-                        </button>
-                        <button className="bg-custom-yellow text-black px-4 py-1 rounded-md">
-                        Регистрация
-                        </button>
+                        <Link href="/auth/login" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">
+                            Войти
+                        </Link>
+                        <Link href="/auth/register" className="bg-custom-yellow text-black px-4 py-1 rounded-md">
+                            Регистрация
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@ export const stepCards = [
         id: 1,
         title: 'Выберите программу',
         description: '(Контракт, Волонтёрство, Альтернативная служба)',
-        image: './icons/shield-2.svg',       
+        image: './icons/shield.svg',       
     },
     {
         id: 2,
