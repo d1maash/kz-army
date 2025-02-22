@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ isHome }: { isHome?: boolean }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -15,18 +15,18 @@ const Navbar = () => {
     return (
         <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
             {/* Logo */}
-            <div className="text-white font-bold text-lg">KZ ARMY</div>
+            <div className={`font-bold text-lg ${isHome ? 'text-white' : 'text-black'}`}>KZ ARMY</div>
             
             {/* Desktop Links */}
-            <div className="hidden md:flex gap-6 text-custom-yellow font-semibold">
+            <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
                 <Link href="/">О программе</Link>
                 <Link href="#">Подача заявки</Link>
                 <Link href="#">Статьи</Link>
-                <Link href="#">FAQ</Link>
+                <Link href="/faq">FAQ</Link>
             </div>
             <div className="hidden md:flex gap-3">
                 <Link href="/auth/login" className="bg-custom-yellow text-black px-4 py-1 rounded-md">Войти</Link>
-                <Link href="/auth/register" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">Регистрация</Link>
+                <Link href="/auth/register" className={`border border-custom-yellow px-4 py-1 rounded-md ${isHome ? 'text-custom-yellow' : 'text-black'}`}>Регистрация</Link>
             </div>
 
             {/* Mobile Toggle Button */}

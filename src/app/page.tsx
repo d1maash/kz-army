@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/Hero";
 import ImportantCard from "@/components/ImportantCard";
+import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
 import StepCard from "@/components/StepCard";
 import { importantCards } from "@/store/importantCards";
@@ -11,6 +12,7 @@ import { stepCards } from "@/store/stepCards";
 export default function Home() {
     return (
         <div>
+            <Navbar isHome={true}></Navbar>
             <HeroSection></HeroSection>
 
             {/* Почему это важно ? */}

@@ -1,8 +1,11 @@
+import Navbar from "@/components/Navbar"
 import Link from "next/link"
 
 const Login = () => {
     return (
-      <div className="flex justify-center items-center bg-[#F4F4F4] w-full h-screen">
+      <>
+      <Navbar />
+        <div className="flex justify-center items-center bg-[#F4F4F4] w-full h-screen">
           <div className="w-full mx-10 md:w-1/3 p-12 bg-white rounded-xl shadow-lg text-center">
               <h3 className="font-bold text-xl">Войти</h3>
               <p className="text-[#7D7D7D]">Напишите ваш логин и пароль</p>
@@ -32,6 +35,7 @@ const Login = () => {
               <p className="mt-3 text-sm font-normal">У вас еще нет аккаунта? <span className="text-[#0084FF]"><Link href={`/auth/register`}>Зарегистрироваться</Link></span></p>
           </div>
       </div>
+      </>
     )
   }
   
