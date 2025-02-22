@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api"; // Используем проксированный путь
+const API_URL = "http://89.46.33.188/api/"; // Используем проксированный путь
 
 export const api = axios.create({
   baseURL: API_URL,

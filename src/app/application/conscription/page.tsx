@@ -1,7 +1,11 @@
+import Navbar from "@/components/Navbar"
 
 const Conscription = () => {
   return (
-    <div>Conscription</div>
+    <>
+        <Navbar />
+        <div>Conscription</div>
+    </>
   )
 }
 
