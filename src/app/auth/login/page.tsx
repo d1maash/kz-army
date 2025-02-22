@@ -4,12 +4,20 @@ import Navbar from "@/components/Navbar"
 import Link from "next/link"
 import { useState } from "react"
 import { api } from "@/utils/api"
+import Image from "next/image"
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
+  // Password toggle
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // Main function
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -45,13 +53,37 @@ const Login = () => {
                         backgroundSize: "20px 20px", 
                     }}
                 />
-                <input 
-                    type="password" 
-                    className="w-full rounded-xl mt-3 bg-[#F7F7F7] text-[#858585] p-3 "
-                    placeholder="Пароль"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative w-full">
+                  <input
+                      type={showPassword ? "text" : "password"}
+                      className="w-full rounded-xl mt-3 bg-[#F7F7F7] text-[#858585] p-3 pr-10" // Add padding for the icon
+                      placeholder="Пароль"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {/* Toggle Button with Custom Icon */}
+                  <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 mt-3"
+                  >
+                      {showPassword ? (
+                          <Image 
+                            src="/icons/eye-invisible.svg" 
+                            alt="Hide Password" 
+                            width={20}
+                            height={20}
+                          />
+                      ) : (
+                          <Image 
+                            src="/icons/eye-visible.svg" 
+                            alt="Show Password" 
+                            width={20}
+                            height={20}
+                          />
+                      )}
+                  </button>
+                </div>
 
                 <button type="submit" className="w-full rounded-xl mt-6 p-3 font-medium bg-custom-yellow text-black">
                     Войти

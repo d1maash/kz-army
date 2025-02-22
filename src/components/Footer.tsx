@@ -1,3 +1,4 @@
+import Link from "next/link"
 
 const Footer = () => {
   return (
@@ -5,7 +6,7 @@ const Footer = () => {
         <div className="container mx-auto px-5 md:px-20 py-5">
             <div className="flex flex-wrap gap-20 text-white">
                 {/* Logo */}
-                <div className="font-bold text-lg">KZ ARMY</div>
+                <Link href="/" className="font-bold text-lg">ARMY.KZ</Link>
 
                 {/* Contacts */}
                 <ul className="flex flex-col gap-3">

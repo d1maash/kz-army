@@ -19,7 +19,7 @@ const ImportantCard = ({ title, description, image, isFirstCard }: ImportantCard
             height={40}
             className="inline-block mr-3"
         />
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h3>
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-center">{title}</h3>
         <p className="text-xs md:text-sm text-center">{description}</p>
     </div>
   )
