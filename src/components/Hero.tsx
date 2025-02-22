@@ -1,7 +1,7 @@
 import Image from "next/image";
 const HeroSection = () => {
     return (
-        <section className="relative w-full h-screen flex justify-center text-center text-white">
+        <section className="relative w-full min-h-[800px] flex justify-center text-center text-white">
             {/* Background Image */}
             <Image
                 src="/hero-image.jpeg"
