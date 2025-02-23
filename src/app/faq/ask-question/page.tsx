@@ -1,11 +1,13 @@
 import FaqProfileCard from "@/components/FaqProfileCard"
 import Navbar from "@/components/Navbar"
 import { faqProfileCards } from "@/store/faqProfileCards"
+// import FaqProfileModal from "@/components/FaqProfileModal"
 
 const AskQuestion = () => {
   return (
     <>
         <Navbar />
+        {/* <FaqProfileModal /> */}
         <div className="container mx-auto px-5 mt-20 md:mt-28">
             {/* Line */}
             <div className="border-t-[12px] border-custom-yellow w-1/5"></div>

@@ -13,7 +13,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
     }
 
     return (
-        <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-5 lg:px-20 xl:px-28 z-10">
+        <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-5 lg:px-20 xl:px-28 z-1">
             {/* Logo */}
             <Link href="/" className={`font-bold text-lg ${isHome ? 'text-white' : 'text-black'}`}>ARMY.KZ</Link>
             
