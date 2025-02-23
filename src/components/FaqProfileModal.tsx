@@ -4,7 +4,11 @@ const FaqProfileModal = ({ name, close }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/70 -z-2">
         <div className="relative mx-auto mt-40 w-2/5 rounded-xl py-8 px-12 bg-white">
-            <X className="absolute top-5 right-5" size={24} />
+            <X 
+                className="absolute top-5 right-5"
+                size={24} 
+                onClick={() => close()}
+            />
             <h3 className="">Задать вопрос <strong>{name}</strong></h3>
             <form action="#">
                 <textarea 
@@ -13,7 +17,6 @@ const FaqProfileModal = ({ name, close }) => {
                 />
                 <button 
                     className="mt-6 w-full py-2 rounded-xl bg-custom-yellow"
-                    onClick={() => close()}
                 >
                     Отправить
                 </button>
