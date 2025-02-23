@@ -13,8 +13,7 @@ const FAQPage = () => {
         <div className="container mx-auto px-5 mt-20 md:mt-28">
             {/* Line */}
             <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
-            <h2 className="text-3xl md:text-4xl font-bold mt-5">Подходите ли вы для службы в Армии РК?</h2>
-            <p className="mt-3 text-lg md:text-xl text-[#7D7D7D]">Ответы на часто задаваемые вопросы.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mt-5">Часто задаваемые вопросы</h2>
 
             {/* Accordion */}
             <Accordion type="single" collapsible className="w-full mt-5 md:px-5">

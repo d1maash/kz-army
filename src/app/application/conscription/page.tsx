@@ -128,7 +128,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         className="w-12 h-6 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer peer-checked:bg-blue-500 transition-all duration-300 relative"
                     >
                         <span
-                            className="w-4 h-4 bg-white rounded-full peer-checked:translate-x-[24px] "
+                            className={`w-4 h-4 bg-white rounded-full transition ${formData.hasDeferment ? "translate-x-[24px]" : ""}`}
                         ></span>
                     </label>
                   </div>
