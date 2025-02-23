@@ -20,7 +20,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
             {/* Desktop Links */}
             <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
                 <Link href="/">О программе</Link>
-                <Link href="#">Подача заявки</Link>
+                <Link href="/application">Подача заявки</Link>
                 <Link href="/article">Статьи</Link>
                 <Link href="/faq">FAQ</Link>
             </div>
@@ -51,7 +51,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     <Link href="/" onClick={toggleMenu}>
                         О программе
                     </Link>
-                    <Link href="#" onClick={toggleMenu}>
+                    <Link href="/application" onClick={toggleMenu}>
                         Подача заявки
                     </Link>
                     <Link href="/article" onClick={toggleMenu}>
