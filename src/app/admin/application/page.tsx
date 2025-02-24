@@ -64,8 +64,8 @@ const AdminApplication = () => {
           </button>
       </div>
 
-      <div className="w-full mt-6 text-center bg-white rounded-xl border-2 border-[#C8C8C8]">
-        <Table className="">
+      <div className="w-full mt-6 text-center bg-white rounded-xl border-2 border-[#C8C8C8] overflow-x-auto">
+        <Table className="min-w-[600px]">
           {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
           <TableHeader>
             <TableRow className="">
@@ -74,7 +74,7 @@ const AdminApplication = () => {
               <TableHead className="text-black text-center font-bold">Дата подачи</TableHead>
               <TableHead className="text-black text-center font-bold">Тип заявки</TableHead>
               <TableHead className="text-black text-center font-bold">Статус</TableHead>
-              <TableHead className="text-black text-center font-bold">Amount</TableHead>
+              <TableHead className="text-black text-center font-bold">Действие</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -91,7 +91,7 @@ const AdminApplication = () => {
                       </TableCell>
                       <TableCell>{item.date}</TableCell>
                       <TableCell>
-                          {item.type === "conscription" ? "срочная служба" : "связист"}
+                          {item.type === "conscription" ? "Срочная служба" : "Связист"}
                       </TableCell>
                       <TableCell>
                           <button 

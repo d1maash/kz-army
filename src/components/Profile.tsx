@@ -2,7 +2,7 @@ import Image from "next/image"
 
 const Profile = () => {
   return (
-    <div className="fixed top-5 right-5 flex items-center gap-3">
+    <div className="absolute top-5 right-5 flex items-center gap-3">
         <div className="flex flex-col">
             <h3 className="font-bold">Иванов Иван</h3>
             <p className="text-[#C8C8C8] text-xs">Администратор</p>
