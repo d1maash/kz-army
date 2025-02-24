@@ -1,7 +1,8 @@
 import Image from "next/image";
 const HeroSection = () => {
     return (
-        <section className="relative w-full h-screen flex items-center justify-center text-center text-white">
+        <section className="relative w-full min-h-[800px] flex justify-center text-center text-white">
+            {/* Background Image */}
             <Image
                 src="/hero-image.jpeg"
                 alt="Солдат"
@@ -9,10 +10,15 @@ const HeroSection = () => {
                 objectFit="cover"
                 className="absolute top-0 left-0 w-full h-full z-[-1]"
             />
-            <div className="max-w-2xl">
-                <h1 className="text-5xl font-bold text-yellow-400">Служить Рдине — долг и чест</h1>
-                <p className="mt-4 text-lg">Подайте заявку на участие в программах Министерства Обороны</p>
-                <button className="mt-6 border border-yellow-400 text-yellow-400 px-6 py-2 rounded-md text-lg">
+            {/* Dark Overlay */}
+            <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-[-1]"></div>
+
+
+            {/* Hero */}
+            <div className="w-full mt-52 md:mt-60 container mx-auto px-5 flex flex-col items-center ">
+                <h1 className="text-4xl md:text-5xl md:text-[4rem] md:w-1/2 font-bold text-custom-yellow">Служить Родине — долг и честь</h1>
+                <p className="mt-4 text-base md:text-xl md:w-1/3">Подайте заявку на участие в программах Министерства Обороны</p>
+                <button className="mt-16 md:mt-40 w-full border border-custom-yellow text-custom-yellow px-6 py-2 rounded-md text-lg">
                     Подать заявку
                 </button>
             </div>
