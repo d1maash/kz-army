@@ -8,6 +8,7 @@ import {
   } from "@/components/ui/table"
 import Navbar from "@/components/Navbar"
 import Image from "next/image"
+import { EllipsisVertical } from 'lucide-react';
 import { testData } from "../admin/application/testData"
 
 const ProfilePage = () => {
@@ -107,14 +108,25 @@ const ProfilePage = () => {
             {/* DOCUMENTS */}
             <h3 className="mt-3 font-bold text-xl">Документы</h3>
             <div className="flex items-center gap-2">
-                <div className="relative flex flex-col items-center justify-center bg-white rounded-xl size-16 shadow-lg">
+                <div className="relative flex flex-col items-center justify-center gap-2 bg-white rounded-xl size-24 shadow-lg">
+                    <EllipsisVertical className="size-5 absolute top-2 right-1"/>
                     <Image
                         src="/icons/file-pdf.svg"
                         alt="pdf"
                         width={30}
                         height={30} 
                     />
-                    <p className="text-xs">Паспорт.pdf</p>
+                    <p className="text-sm">Паспорт.pdf</p>
+                </div>
+                <div className="relative flex flex-col items-center justify-center gap-2 bg-white rounded-xl size-24 shadow-lg">
+                    <EllipsisVertical className="size-5 absolute top-2 right-1"/>
+                    <Image
+                        src="/icons/file-pdf.svg"
+                        alt="pdf"
+                        width={30}
+                        height={30} 
+                    />
+                    <p className="text-sm">Паспорт.pdf</p>
                 </div>
             </div>
             
