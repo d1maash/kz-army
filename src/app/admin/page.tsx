@@ -1,5 +1,8 @@
 "use client"
 
+import CustomPieChart from "@/components/admin/CustomPieChart";
+import LineChart from "@/components/admin/LineChart";
+
 const AdminPage = () => {
   return (
     <div>
@@ -14,7 +17,7 @@ const AdminPage = () => {
                 backgroundPosition: "10px center", 
                 backgroundSize: "20px 20px", 
             }}
-            />
+          />
 
         </form>
 
@@ -25,7 +28,7 @@ const AdminPage = () => {
             </div>
             <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
                 <h2 className="font-bold text-5xl">120</h2>
-                <p className="mt-2">ОАктивные заявки</p>
+                <p className="mt-2">Активные заявки</p>
             </div>
             <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
                 <h2 className="font-bold text-5xl">120</h2>
@@ -38,9 +41,24 @@ const AdminPage = () => {
 
         </div>
 
-        <div className="flex justify-between">
-              <div className="flex flex-col bg-white shadow-lg">
+        <div className="flex justify-between flex-wrap md:flex-nowrap mt-6 gap-6">
+              {/* CHART PIE */}
+              <div className="flex flex-col rounded-xl p-5 w-full md:w-1/3 min-h-56 bg-white shadow-lg">
+                  <h1 className="font-bold">Диаграмма заявок</h1>
+                  <CustomPieChart accepted={5} rejected={15} />
+                  <div className="flex items-center mt-6 gap-3">
+                      <div className="bg-[#C8C8C8] w-3 h-3 rounded-full"></div>
+                      <p>Одобренные</p>
+                  </div>
+                  <div className="flex items-center mt-6 gap-3">
+                    <div className="bg-custom-yellow w-3 h-3 rounded-full"></div>
+                    <p>Отклоненные</p>
+                  </div>
+              </div>
 
+              {/* STATISTIC */}
+              <div className="bg-white shadow-lg rounded-xl min-h-53 w-full">
+                  <LineChart />
               </div>
         </div>
     </div>
