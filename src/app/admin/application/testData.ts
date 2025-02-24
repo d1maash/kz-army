@@ -3,7 +3,7 @@ export const testData = [
         id: 34519472462,
         name: 'Иванов Иван Иванович',
         date: '12.02.2025',
-        type: 'consription',
+        type: 'conscription',
         status: 'Одобрена'
     },
     {
@@ -14,7 +14,7 @@ export const testData = [
         status: 'В обработке'
     },
     {
-        id: 42452454343,
+        id: 42452454342,
         name: 'Иванов Иван Иванович',
         date: '12.02.2025',
         type: 'communication',

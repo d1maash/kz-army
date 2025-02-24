@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import {
   Table,
@@ -16,10 +18,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Ellipsis } from 'lucide-react';
 import { testData } from "./testData";
+import { Ellipsis } from "lucide-react";
+import { useState } from "react";
+import ApplicationDetailsModal from "./ApplicationModal";
 
 const AdminApplication = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  
+  const handleNameClick = (application) => {
+    setSelectedApplication(application);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+      setIsModalOpen(false);
+      setSelectedApplication(null);
+  };
+
   return (
     <div>
       <div className="flex justify-between gap-3">
@@ -61,42 +78,42 @@ const AdminApplication = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
+
+              {/* MAIN APPLICATION LIST */}
               {testData.map((item) => (
-                <>
                   <TableRow key={item.id}>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell className="text-[#033EFF] underline">{item.name}</TableCell>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>срочная служба</TableCell>
-                    <TableCell>
-                        <button 
-                          className={`rounded-xl font-semibold p-1 px-3 ${item.status === "Одобрена" ?
-                            "text-[#277C00] bg-[#E0FFD1]" : 
-                            item.status === "В обработке" ?
-                            "text-[#9F5000] bg-[#FFE7CE]" : 
-                            "text-[#9F0000] bg-[#FFDCDC]"
-                          }`}
-                        >
-                            {item.status}
-                        </button>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Ellipsis className="mx-auto size-5" />
-                    </TableCell>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell 
+                          className="text-[#033EFF] underline"
+                          onClick={() => handleNameClick(item)}
+                      >
+                          {item.name}
+                      </TableCell>
+                      <TableCell>{item.date}</TableCell>
+                      <TableCell>
+                          {item.type === "conscription" ? "срочная служба" : "связист"}
+                      </TableCell>
+                      <TableCell>
+                          <button 
+                              className={`rounded-xl font-semibold p-1 px-3 ${item.status === "Одобрена" ?
+                              "text-[#277C00] bg-[#E0FFD1]" : 
+                              item.status === "В обработке" ?
+                              "text-[#9F5000] bg-[#FFE7CE]" : 
+                              "text-[#9F0000] bg-[#FFDCDC]"
+                              }`}
+                          >
+                              {item.status}
+                          </button>
+                      </TableCell>
+                      <TableCell className="text-right">
+                          <Ellipsis className="mx-auto size-5" />
+                      </TableCell>
                   </TableRow>
-                </>
               ))}
-              {/* <TableCell>34519472462</TableCell>
-              <TableCell className="text-[#033EFF] underline">Иванов Иван Иванович</TableCell>
-              <TableCell>12.02.2025</TableCell>
-              <TableCell>срочная служба</TableCell>
-              <TableCell>Одобрена</TableCell>
-              <TableCell className="text-right">
-                <Ellipsis className="mx-auto size-5" />
-              </TableCell> */}
           </TableBody>
         </Table>
 
+        {/* PAGINATION */}
         <Pagination className="mt-5">
           <PaginationContent>
             <PaginationItem>
@@ -124,6 +141,15 @@ const AdminApplication = () => {
           </PaginationContent>
         </Pagination>
       </div>
+
+      {/* Render the modal */}
+      {selectedApplication && (
+          <ApplicationDetailsModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              application={selectedApplication}
+          />
+      )}
     </div>
   )
 }
