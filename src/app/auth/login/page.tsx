@@ -20,15 +20,16 @@ const Login = () => {
   // Main function
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
     try {
-      const response = await api.post("/auth/login/", { username, password });
-      console.log("Успешный вход:", response.data);
-      // Можно сохранить токен или обновить состояние пользователя
-    } catch (err: any) {
-      console.error("Ошибка входа:", err.response?.data || err.message);
-      setError(err.response?.data?.detail || "Ошибка авторизации");
+        const response = await api.login(username, password);
+        console.log('Успешный вход:', response);
+        // Тут можно сохранить токен в localStorage
+    } catch (err) {
+        setError('Ошибка входа. Проверьте данные.');
     }
-  };
+};
 
 
     return (
