@@ -49,7 +49,20 @@ export const api = {
         }
         return data
     },
-    getProfile: (token: string) => request('/auth/profile/', 'GET', undefined, token),
+    getProfile: async () => {
+        const token = localStorage.getItem('token')
+        if (!token) throw new Error('Требуется авторизация')
+
+        const response = await fetch(`${BASE_URL}/auth/profile/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля')
+        return data
+    },
     updateProfile: (token: string, userData: any) => request('/auth/profile/', 'PUT', userData, token),
     getUsers: (token: string) => request('/users/', 'GET', undefined, token),
     login: async (username: string, password: string) => {
