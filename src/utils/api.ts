@@ -37,18 +37,29 @@ export const api = {
                 email,
                 password
             }),
-        })
+        });
 
-        const data = await response.json()
-        if (!response.ok) {
-            const errorMessage = data.username?.[0] ||
-                data.email?.[0] ||
-                data.password?.[0] ||
-                'Ошибка регистрации'
-            throw new Error(errorMessage)
+        let data;
+        const contentType = response.headers.get("content-type");
+
+        // Проверяем, что сервер действительно вернул JSON
+        if (contentType && contentType.includes("application/json")) {
+            data = await response.json();
+        } else {
+            throw new Error(`Ошибка сервера: ${response.status}`);
         }
-        return data
+
+        if (!response.ok) {
+            const errorMessage = data?.username?.[0] ||
+                data?.email?.[0] ||
+                data?.password?.[0] ||
+                'Ошибка регистрации';
+            throw new Error(errorMessage);
+        }
+
+        return data;
     },
+
     getProfile: async () => {
         const token = localStorage.getItem('token')
         if (!token) throw new Error('Требуется авторизация')
