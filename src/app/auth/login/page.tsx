@@ -21,23 +21,18 @@ const Login = () => {
 
     // Main function
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
+        e.preventDefault()
+        setError('')
 
         try {
-            const loginResponse = await api.login(username, password);
-            localStorage.setItem("token", loginResponse.access); // Сохраняем токен
-
-            // Перенаправляем сразу после успешного входа
-            router.push("/profile");
+            const response = await api.login(username, password)
+            localStorage.setItem('token', response.access)
+            localStorage.setItem('user', JSON.stringify({ username }))
+            router.push('/profile') // Изменили редирект на профиль
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('Произошла неизвестная ошибка');
-            }
+            setError('Ошибка входа. Проверьте данные.')
         }
-    };
+    }
 
     return (
         <>
