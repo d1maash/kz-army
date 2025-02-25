@@ -41,9 +41,9 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
 
             {user ? (
                 <div className="hidden md:flex items-center gap-4">
-                    <span className={`${isHome ? 'text-custom-yellow' : 'text-black'}`}>
+                    <a href="/profile" className={`${isHome ? `text-white bg-custom-yellow px-4 py-1 rounded-md` : 'text-white bg-black px-4 py-1 rounded-md'}`}>
                         {user.username}
-                    </span>
+                    </a>
                     <button
                         onClick={handleLogout}
                         className="border border-custom-yellow px-4 py-1 rounded-md text-custom-yellow"
