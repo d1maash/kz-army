@@ -21,6 +21,10 @@ const Footer = () => {
                     <h3 className="font-bold">Наши соц-сети</h3>
                 </ul>
             </div>
+
+            <div className="mt-12 text-center text-white text-sm">
+                Министерство обороны Республики Казахстан
+            </div>
         </div>
     </div>
   )
