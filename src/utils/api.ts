@@ -37,37 +37,47 @@ export const api = {
                 email,
                 password
             }),
-        })
+        });
 
-        const data = await response.json()
-        if (!response.ok) {
-            const errorMessage = data.username?.[0] ||
-                data.email?.[0] ||
-                data.password?.[0] ||
-                'Ошибка регистрации'
-            throw new Error(errorMessage)
+        let data;
+        const contentType = response.headers.get("content-type");
+
+        // Проверяем, что сервер действительно вернул JSON
+        if (contentType && contentType.includes("application/json")) {
+            data = await response.json();
+        } else {
+            throw new Error(`Ошибка сервера: ${response.status}`);
         }
-        return data
+
+        if (!response.ok) {
+            const errorMessage = data?.username?.[0] ||
+                data?.email?.[0] ||
+                data?.password?.[0] ||
+                'Ошибка регистрации';
+            throw new Error(errorMessage);
+        }
+
+        return data;
     },
     // Изменил на 'auth/me
     getProfile: async () => {
         const token = localStorage.getItem('token')
         if (!token) throw new Error('Требуется авторизация')
-    
+
         const response = await fetch(`${BASE_URL}/auth/me/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         })
-    
+
         if (response.status === 401) {
             localStorage.removeItem('token')
             throw new Error('Сессия истекла')
         }
-    
+
         const data = await response.json()
         if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля')
-        
+
         return data
     },
     updateProfile: (token: string, userData: any) => request('/auth/profile/', 'PUT', userData, token),

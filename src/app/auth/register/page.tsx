@@ -36,7 +36,14 @@ const Register = () => {
                 router.push("/auth/login")
             }
         } catch (err: any) {
-            setError(err.message || "Ошибка регистрации")
+            // Улучшенная обработка ошибок
+            let message = err.message;
+            if (message.includes("Failed to fetch")) {
+                message = "Проблемы с соединением";
+            } else if (message.includes("Ошибка сервера")) {
+                message = "Внутренняя ошибка сервера";
+            }
+            setError(message || "Ошибка регистрации")
         } finally {
             setIsLoading(false)
         }
