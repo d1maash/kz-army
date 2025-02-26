@@ -18,16 +18,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { testData } from "./testData";
+// import { testData } from "./testData";
 import { Ellipsis } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationDetailsModal from "./ApplicationModal";
+import { api } from "@/utils/api";
 
 const AdminApplication = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
   
-  const handleNameClick = (application) => {
+  const handleNameClick = (application: any) => {
     setSelectedApplication(application);
     setIsModalOpen(true);
   };
@@ -36,6 +37,28 @@ const AdminApplication = () => {
       setIsModalOpen(false);
       setSelectedApplication(null);
   };
+
+  // APPLICATIONS
+  const [applications, setApplications] = useState({ count: 0, results: [] })
+    
+    const handleApplications = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const applications = await api.getApplications(token);
+          setApplications(applications)
+          // console.log(applications)
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        console.error("authorization required")
+      }
+    }
+  
+    useEffect(() => {
+        handleApplications();
+    }, [])
 
   return (
     <div>
@@ -80,29 +103,34 @@ const AdminApplication = () => {
           <TableBody>
 
               {/* MAIN APPLICATION LIST */}
-              {testData.map((item) => (
-                  <TableRow key={item.id}>
-                      <TableCell>{item.id}</TableCell>
+              {applications.results.map((item) => (
+                  <TableRow key={item?.id}>
+                      <TableCell>{item?.id}</TableCell>
                       <TableCell 
                           className="text-[#033EFF] underline"
                           onClick={() => handleNameClick(item)}
                       >
-                          {item.name}
+                          {item?.full_name}
                       </TableCell>
-                      <TableCell>{item.date}</TableCell>
                       <TableCell>
-                          {item.type === "conscription" ? "Срочная служба" : "Связист"}
+                          {new Date(item?.submitted_at).toLocaleDateString("ru-RU")}
+                      </TableCell>
+                      <TableCell>
+                          {item?.application_type === "conscription" ? "Срочная служба" : "Связист"}
                       </TableCell>
                       <TableCell>
                           <button 
-                              className={`rounded-xl font-semibold p-1 px-3 ${item.status === "Одобрена" ?
+                              className={`rounded-xl font-semibold p-1 px-3 ${item?.status === "accepted" ?
                               "text-[#277C00] bg-[#E0FFD1]" : 
-                              item.status === "В обработке" ?
+                              item?.status === "in_review" ?
                               "text-[#9F5000] bg-[#FFE7CE]" : 
                               "text-[#9F0000] bg-[#FFDCDC]"
                               }`}
                           >
-                              {item.status}
+                              {item?.status === "in_review" ? 
+                              "В обработке" :
+                              item?.status === "accepted" ?
+                              "Одобрена" : "Отклонена"}
                           </button>
                       </TableCell>
                       <TableCell className="text-right">

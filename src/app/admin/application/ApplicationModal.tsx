@@ -5,13 +5,7 @@ import React from "react";
 interface ApplicationDetailsModalProps {
     isOpen: boolean;
     onClose: () => void;
-    application: {
-        id: string;
-        name: string;
-        date: string;
-        type: string;
-        status: string;
-    };
+    application: any;
 }
 
 const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
@@ -33,7 +27,7 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
                         height={50}
                     />
                     <div className="flex flex-col justify-center">
-                        <h3><strong>{application.name}</strong></h3>
+                        <h3><strong>{application.full_name}</strong></h3>
                         <p>{application.type === "conscription" ? "Срочная служба" : "Связист"}</p>
                     </div>
                 </div>
@@ -41,19 +35,19 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
                 <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">
                     <div className="flex flex-col">
                         <div>ФИО</div>
-                        <div><strong>Иванов Иван Иванович</strong></div>
+                        <div><strong>{application.full_name}</strong></div>
                     </div>
                     <div className="flex flex-col">
                         <div>Контактные данные</div>
-                        <div><strong>+7 (777) 777 77 77</strong></div>
+                        <div><strong>{application.phone}</strong></div>
                     </div>
                     <div className="flex flex-col">
                         <div>Дата рождения</div>
-                        <div><strong>12.02.1997</strong></div>
+                        <div><strong>{application.birth_date}</strong></div>
                     </div>
                     <div className="flex flex-col">
                         <div>Адрес проживания</div>
-                        <div><strong>Акмолинская область, г. Астана, Елорда 12</strong></div>
+                        <div><strong>{application.address}</strong></div>
                     </div>
                     <div className="flex flex-col">
                         <div>ИИН</div>

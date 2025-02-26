@@ -49,18 +49,25 @@ export const api = {
         }
         return data
     },
+    // Изменил на 'auth/me
     getProfile: async () => {
         const token = localStorage.getItem('token')
         if (!token) throw new Error('Требуется авторизация')
-
-        const response = await fetch(`${BASE_URL}/auth/profile/`, {
+    
+        const response = await fetch(`${BASE_URL}/auth/me/`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,
             },
         })
-
+    
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            throw new Error('Сессия истекла')
+        }
+    
         const data = await response.json()
         if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля')
+        
         return data
     },
     updateProfile: (token: string, userData: any) => request('/auth/profile/', 'PUT', userData, token),
@@ -77,6 +84,11 @@ export const api = {
         const data = await response.json()
         if (!response.ok) throw new Error(data.detail || 'Ошибка входа')
         return data
+    },
+
+    logout: () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
     },
 
     postFormData: async (endpoint: string, formData: FormData) => {
@@ -99,6 +111,20 @@ export const api = {
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || data.message || 'Ошибка отправки');
+        return data;
+    },
+
+    // Admin методы:
+    getApplications: async (token: string) => {
+        const response = await fetch(`${BASE_URL}/admin/applications/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
         return data;
     },
 }
