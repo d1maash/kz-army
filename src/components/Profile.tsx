@@ -36,7 +36,7 @@ const Profile = () => {
     return (
         <div className="absolute top-5 right-5 flex items-center gap-3">
             <div className="flex flex-col">
-                <h3 className="font-bold">{userData?.username}</h3>
+                <h3 className="font-bold">{userData?.full_name}</h3>
                 <p className="text-[#C8C8C8] text-end text-xs">Администратор</p>
             </div>
             <Image

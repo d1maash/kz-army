@@ -1,6 +1,11 @@
 "use client"
 
-import Image from "next/image"
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import { Ellipsis } from "lucide-react";
+import { api } from "@/utils/api";
+import ApplicationDetailsModal from "./ApplicationModal";
 import {
     Table,
     TableBody,
@@ -8,7 +13,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
     Pagination,
     PaginationContent,
@@ -17,16 +22,17 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/components/ui/pagination"
-// import { testData } from "./testData";
-import { Ellipsis } from "lucide-react";
-import { useEffect, useState } from "react";
-import ApplicationDetailsModal from "./ApplicationModal";
-import { api } from "@/utils/api";
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 
 const AdminApplication = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
+    const [applications, setApplications] = useState({ count: 0, results: [] });
+
+    useEffect(() => {
+        handleApplications();
+    }, []);
 
     const handleNameClick = (application: any) => {
         setSelectedApplication(application);
@@ -38,27 +44,26 @@ const AdminApplication = () => {
         setSelectedApplication(null);
     };
 
-    // APPLICATIONS
-    const [applications, setApplications] = useState({ count: 0, results: [] })
-
     const handleApplications = async () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (token) {
             try {
                 const applications = await api.getApplications(token);
-                setApplications(applications)
-                // console.log(applications)
+                setApplications(applications);
             } catch (error) {
-                console.error(error)
+                console.error(error);
             }
         } else {
-            console.error("authorization required")
+            console.error("Authorization required");
         }
-    }
+    };
 
-    useEffect(() => {
-        handleApplications();
-    }, [])
+    const handleExport = () => {
+        const worksheet = XLSX.utils.json_to_sheet(applications.results);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+        XLSX.writeFile(workbook, "applications.xlsx");
+    };
 
     return (
         <div>
@@ -76,22 +81,16 @@ const AdminApplication = () => {
                         }}
                     />
                 </form>
-                <button className="flex justify-center gap-3 items-center font-medium bg-custom-yellow rounded-xl p-3 px-6">
-                    Печать
-                    <Image
-                        src="/icons/download-file.svg"
-                        alt="download"
-                        width={16}
-                        height={16}
-                    />
-                </button>
+                <Button onClick={handleExport} className="flex justify-center gap-3 items-center font-medium bg-custom-yellow rounded-xl p-3 px-6">
+                    Экспорт в Excel
+                    <Image src="/icons/download-file.svg" alt="download" width={16} height={16} />
+                </Button>
             </div>
 
             <div className="w-full mt-6 text-center bg-white rounded-xl border-2 border-[#C8C8C8] overflow-x-auto">
                 <Table className="min-w-[600px]">
-                    {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                     <TableHeader>
-                        <TableRow className="">
+                        <TableRow>
                             <TableHead className="w-[100px] text-black text-center font-bold">ID заявки</TableHead>
                             <TableHead className="text-black text-center font-bold">ФИО</TableHead>
                             <TableHead className="text-black text-center font-bold">Дата подачи</TableHead>
@@ -101,36 +100,24 @@ const AdminApplication = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-
-                        {/* MAIN APPLICATION LIST */}
                         {applications.results.map((item) => (
                             <TableRow key={item?.id}>
                                 <TableCell>{item?.id}</TableCell>
                                 <TableCell
-                                    className="text-[#033EFF] underline"
+                                    className="text-[#033EFF] underline cursor-pointer"
                                     onClick={() => handleNameClick(item)}
                                 >
                                     {item?.full_name}
                                 </TableCell>
-                                <TableCell>
-                                    {new Date(item?.submitted_at).toLocaleDateString("ru-RU")}
-                                </TableCell>
-                                <TableCell>
-                                    {item?.application_type === "conscription" ? "Срочная служба" : "Связист"}
-                                </TableCell>
+                                <TableCell>{new Date(item?.submitted_at).toLocaleDateString("ru-RU")}</TableCell>
+                                <TableCell>{item?.application_type === "conscription" ? "Срочная служба" : "Связист"}</TableCell>
                                 <TableCell>
                                     <button
                                         className={`rounded-xl font-semibold p-1 px-3 ${item?.status === "accepted" ?
                                             "text-[#277C00] bg-[#E0FFD1]" :
-                                            item?.status === "in_review" ?
-                                                "text-[#9F5000] bg-[#FFE7CE]" :
-                                                "text-[#9F0000] bg-[#FFDCDC]"
-                                            }`}
+                                            item?.status === "in_review" ? "text-[#9F5000] bg-[#FFE7CE]" : "text-[#9F0000] bg-[#FFDCDC]"}`}
                                     >
-                                        {item?.status === "in_review" ?
-                                            "В обработке" :
-                                            item?.status === "accepted" ?
-                                                "Одобрена" : "Отклонена"}
+                                        {item?.status === "in_review" ? "В обработке" : item?.status === "accepted" ? "Одобрена" : "Отклонена"}
                                     </button>
                                 </TableCell>
                                 <TableCell className="text-right">
@@ -140,8 +127,6 @@ const AdminApplication = () => {
                         ))}
                     </TableBody>
                 </Table>
-
-                {/* PAGINATION */}
                 <Pagination className="mt-5">
                     <PaginationContent>
                         <PaginationItem>
@@ -154,7 +139,6 @@ const AdminApplication = () => {
                             <PaginationLink className="border-[#E8E7DF] border-2" href="#">2</PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
-
                             <PaginationEllipsis className="border-[#E8E7DF] border-2 rounded-md" />
                         </PaginationItem>
                         <PaginationItem>
@@ -169,8 +153,6 @@ const AdminApplication = () => {
                     </PaginationContent>
                 </Pagination>
             </div>
-
-            {/* Render the modal */}
             {selectedApplication && (
                 <ApplicationDetailsModal
                     isOpen={isModalOpen}
@@ -179,7 +161,7 @@ const AdminApplication = () => {
                 />
             )}
         </div>
-    )
-}
+    );
+};
 
-export default AdminApplication
+export default AdminApplication;
