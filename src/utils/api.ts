@@ -137,6 +137,25 @@ export const api = {
         if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
         return data;
     },
+
+    updateApplicationById: async (token: string, id: number, status: string) => {
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update application status");
+        }
+
+        return await response.json();
+
+        
+    }
 }
 
 

@@ -17,7 +17,6 @@ import {
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
@@ -28,13 +27,13 @@ import { Button } from "@/components/ui/button";
 const AdminApplication = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
-    const [applications, setApplications] = useState({ count: 0, results: [] });
+    const [applications, setApplications] = useState<{ count: number, results: any[] }>({ count: 0, results: [] });
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState("");
+    const pageSize = 12;
 
-    useEffect(() => {
-        handleApplications();
-    }, []);
-
-    const handleNameClick = (application: any) => {
+    // MODAL
+    const handleNameClick = (application) => {
         setSelectedApplication(application);
         setIsModalOpen(true);
     };
@@ -44,12 +43,13 @@ const AdminApplication = () => {
         setSelectedApplication(null);
     };
 
-    const handleApplications = async () => {
-        const token = localStorage.getItem("token");
+    // GET APPLICATIONS
+    const handleApplications = async (page = 1) => {
+        const token = localStorage.getItem('token');
         if (token) {
             try {
-                const applications = await api.getApplications(token);
-                setApplications(applications);
+                const response = await api.getApplications(token, page, pageSize);
+                setApplications(response);
             } catch (error) {
                 console.error(error);
             }
@@ -57,7 +57,27 @@ const AdminApplication = () => {
             console.error("Authorization required");
         }
     };
+    
+    useEffect(() => {
+        handleApplications(currentPage);
+    }, [currentPage]);
 
+    // SEARCH and PAGINATION 
+    const filteredApplications = applications.results.filter(app =>
+        app.full_name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredApplications.length / pageSize);
+
+    const handlePrevious = () => {
+        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    };
+    
+    const handleNext = () => {
+        if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+    };
+
+    // EXCEL EXPORT
     const handleExport = () => {
         const worksheet = XLSX.utils.json_to_sheet(applications.results);
         const workbook = XLSX.utils.book_new();
@@ -65,22 +85,40 @@ const AdminApplication = () => {
         XLSX.writeFile(workbook, "applications.xlsx");
     };
 
+    // APPLICATION STATUS CHANGE
+    const handleStatusChange = async (id: number, newStatus: string) => {
+        const token = localStorage.getItem('token');
+    
+        if (!token) {
+            console.error("Authorization required");
+            return;
+        }
+    
+        try {
+            await api.updateApplicationById(token, id, newStatus);
+    
+            // Ensure proper type structure
+            setApplications(prev => ({
+                count: prev.count, // Keep the count unchanged
+                results: prev.results.map(app =>
+                    app.id === id ? { ...app, status: newStatus } : app
+                ),
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div>
             <div className="flex justify-between gap-3">
-                <form action="#" className="w-full">
-                    <input
-                        type="text"
-                        placeholder="Поиск"
-                        className="w-full p-3 pl-10 shadow-sm rounded-xl bg-[#F7F7F7]"
-                        style={{
-                            backgroundImage: "url('/icons/search.svg')",
-                            backgroundRepeat: "no-repeat",
-                            backgroundPosition: "10px center",
-                            backgroundSize: "20px 20px",
-                        }}
-                    />
-                </form>
+                <input
+                    type="text"
+                    placeholder="Поиск"
+                    className="w-full p-3 pl-10 shadow-sm rounded-xl bg-[#F7F7F7]"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <Button onClick={handleExport} className="flex justify-center gap-3 items-center font-medium bg-custom-yellow rounded-xl p-3 px-6">
                     Экспорт в Excel
                     <Image src="/icons/download-file.svg" alt="download" width={16} height={16} />
@@ -91,16 +129,16 @@ const AdminApplication = () => {
                 <Table className="min-w-[600px]">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px] text-black text-center font-bold">ID заявки</TableHead>
-                            <TableHead className="text-black text-center font-bold">ФИО</TableHead>
-                            <TableHead className="text-black text-center font-bold">Дата подачи</TableHead>
-                            <TableHead className="text-black text-center font-bold">Тип заявки</TableHead>
-                            <TableHead className="text-black text-center font-bold">Статус</TableHead>
-                            <TableHead className="text-black text-center font-bold">Действие</TableHead>
+                            <TableHead>ID заявки</TableHead>
+                            <TableHead>ФИО</TableHead>
+                            <TableHead>Дата подачи</TableHead>
+                            <TableHead>Тип заявки</TableHead>
+                            <TableHead>Статус</TableHead>
+                            <TableHead>Действие</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {applications.results.map((item) => (
+                        {filteredApplications.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) => (
                             <TableRow key={item?.id}>
                                 <TableCell>{item?.id}</TableCell>
                                 <TableCell
@@ -112,13 +150,39 @@ const AdminApplication = () => {
                                 <TableCell>{new Date(item?.submitted_at).toLocaleDateString("ru-RU")}</TableCell>
                                 <TableCell>{item?.application_type === "conscription" ? "Срочная служба" : "Связист"}</TableCell>
                                 <TableCell>
-                                    <button
-                                        className={`rounded-xl font-semibold p-1 px-3 ${item?.status === "accepted" ?
-                                            "text-[#277C00] bg-[#E0FFD1]" :
-                                            item?.status === "in_review" ? "text-[#9F5000] bg-[#FFE7CE]" : "text-[#9F0000] bg-[#FFDCDC]"}`}
+                                    {/* <button className={`rounded-xl font-semibold p-1 px-3 ${
+                                        item?.status === "approved" ? "text-[#277C00] bg-[#E0FFD1]" :
+                                        item?.status === "in_review" ? "text-[#9F5000] bg-[#FFE7CE]" : "text-[#9F0000] bg-[#FFDCDC]"}`}
                                     >
-                                        {item?.status === "in_review" ? "В обработке" : item?.status === "accepted" ? "Одобрена" : "Отклонена"}
-                                    </button>
+                                        {item?.status === "in_review" ? "В обработке" : item?.status === "approved" ? "Одобрена" : "Отклонена"}
+                                    </button> */}
+                                    <div className="relative inline-block">
+                                        <button
+                                            className={`rounded-xl font-semibold p-1 px-3 w-full text-left ${
+                                                item?.status === "approved"
+                                                    ? "text-[#277C00] bg-[#E0FFD1]"
+                                                    : item?.status === "in_review"
+                                                    ? "text-[#9F5000] bg-[#FFE7CE]"
+                                                    : "text-[#9F0000] bg-[#FFDCDC]"
+                                            }`}
+                                        >
+                                            {item?.status === "in_review"
+                                                ? "В обработке"
+                                                : item?.status === "approved"
+                                                ? "Одобрена"
+                                                : "Отклонена"}
+                                        </button>
+
+                                        <select
+                                            value={item?.status}
+                                            onChange={(e) => handleStatusChange(item?.id, e.target.value)}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        >
+                                            <option value="in_review">В обработке</option>
+                                            <option value="approved">Одобрена</option>
+                                            <option value="rejected">Отклонена</option>
+                                        </select>
+                                    </div>
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <Ellipsis className="mx-auto size-5" />
@@ -130,25 +194,32 @@ const AdminApplication = () => {
                 <Pagination className="mt-5">
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious className="border-[#E8E7DF] border-2" href="#" />
+                            <PaginationPrevious 
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"  
+                                onClick={handlePrevious} 
+                                // disabled={currentPage === 1} 
+                            />
                         </PaginationItem>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <PaginationItem key={index}>
+                                <PaginationLink 
+                                    className={`border-2 ${
+                                        currentPage === index + 1 
+                                            ? 'border-custom-yellow text-custom-yellow' 
+                                            : 'border-[#E8E7DF] hover:border-custom-yellow'
+                                    }`}  
+                                    onClick={() => setCurrentPage(index + 1)}
+                                >
+                                    {index + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
                         <PaginationItem>
-                            <PaginationLink className="border-custom-yellow border-2 text-custom-yellow" href="#">1</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink className="border-[#E8E7DF] border-2" href="#">2</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis className="border-[#E8E7DF] border-2 rounded-md" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink className="border-[#E8E7DF] border-2" href="#">9</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink className="border-[#E8E7DF] border-2" href="#">10</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext className="border-[#E8E7DF] border-2" href="#" />
+                            <PaginationNext 
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"  
+                                onClick={handleNext} 
+                                // disabled={currentPage === totalPages} 
+                            />
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>

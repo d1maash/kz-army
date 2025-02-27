@@ -26,9 +26,9 @@ export default function AdminLayout({
         if (!token) throw new Error('Требуется авторизация');
 
         const profile = await api.getProfile();
-        console.log(profile)
+        // console.log(profile)
         // is_staff нету в auth/me 
-        if (profile.status !== "unverified") throw new Error('Доступ запрещен');
+        if (profile.status === "unverified") throw new Error('Доступ запрещен');
 
         setIsAllowed(true); // Allow access if the user is an admin
       } catch (error) {
