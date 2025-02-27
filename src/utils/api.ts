@@ -117,30 +117,54 @@ export const api = {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
     },
-
     postFormData: async (endpoint: string, formData: FormData) => {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Требуется авторизация');
 
-        const response = await fetch(`${BASE_URL}${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData,
-        });
+        try {
+            const response = await fetch(`${BASE_URL}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    // Не устанавливаем Content-Type вручную!
+                },
+                body: formData,
+            });
 
-        if (response.status === 401) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/auth/login';
+            // Обработка 401
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                let errorMessage = 'Ошибка при выполнении запроса';
+
+                if (data.detail) {
+                    errorMessage = data.detail;
+                } else if (data.files) {
+                    errorMessage = data.files.join(', ');
+                } else if (typeof data === 'object') {
+                    errorMessage = Object.entries(data)
+                        .map(([field, errors]) =>
+                            `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`
+                        )
+                        .join('\n');
+                }
+
+                throw new Error(errorMessage);
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Ошибка в postFormData:', error);
+            throw error;
         }
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || data.message || 'Ошибка отправки');
-        return data;
     },
-
     // Admin методы:
     getApplications: async (token: string) => {
         const response = await fetch(`${BASE_URL}/admin/applications/`, {
