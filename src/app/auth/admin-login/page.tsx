@@ -30,9 +30,11 @@ const AdminLogin = () => {
             localStorage.setItem("token", loginResponse.access);
             console.log(loginResponse);
             if (loginResponse.is_admin) {
+                // is_admin для будущего
+                localStorage.setItem('is_admin', loginResponse.is_admin);
                 localStorage.setItem('user', JSON.stringify({ username }));
                 // Redirect to the admin dashboard regardless of current path
-                router.push('/admin'); // Or '/admin/application' if preferred
+                router.push('/admin'); 
             } else {
                 setError('You dont have enough permission for this');
                 localStorage.removeItem("token");
