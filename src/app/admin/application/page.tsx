@@ -95,7 +95,7 @@ const AdminApplication = () => {
         }
     
         try {
-            await api.updateApplicationById(token, id, newStatus);
+            await api.updateApplicationById(id, newStatus);
     
             // Ensure proper type structure
             setApplications(prev => ({
@@ -129,12 +129,12 @@ const AdminApplication = () => {
                 <Table className="min-w-[600px]">
                     <TableHeader>
                         <TableRow>
-                            <TableHead>ID заявки</TableHead>
-                            <TableHead>ФИО</TableHead>
-                            <TableHead>Дата подачи</TableHead>
-                            <TableHead>Тип заявки</TableHead>
-                            <TableHead>Статус</TableHead>
-                            <TableHead>Действие</TableHead>
+                            <TableHead className="text-center">ID заявки</TableHead>
+                            <TableHead className="text-center">ФИО</TableHead>
+                            <TableHead className="text-center">Дата подачи</TableHead>
+                            <TableHead className="text-center">Тип заявки</TableHead>
+                            <TableHead className="text-center">Статус</TableHead>
+                            <TableHead className="text-center">Действие</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

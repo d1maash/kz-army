@@ -5,6 +5,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
+import Image from "next/image"
 import Link from "next/link"
 
 const FAQPage = () => {
@@ -14,7 +15,19 @@ const FAQPage = () => {
         <div className="container mx-auto px-5 mt-20 md:mt-28">
             {/* Line */}
             <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
-            <h2 className="text-3xl md:text-4xl font-bold mt-5">Часто задаваемые вопросы</h2>
+            <div className="flex items-center justify-between">
+                <h2 className="text-3xl md:text-4xl font-bold mt-5">Часто задаваемые вопросы</h2>
+
+                <Link href="#" className="hidden md:flex items-center gap-2 bg-custom-yellow rounded-xl p-2 px-4">
+                    <Image 
+                        src="/icons/telegram-black.svg"
+                        alt="telegram"
+                        width={30}
+                        height={30}
+                    />
+                    Телеграм бот
+                </Link>
+            </div>
 
             {/* Accordion */}
             <div className="flex flex-wrap md:flex-nowrap">
@@ -73,7 +86,7 @@ const FAQPage = () => {
                 </Accordion>
             </div>
 
-                <Link href="/faq/ask-question" className="fixed right-20 bottom-10 animate-bounce text-center font-medium w-full max-w-[200px] rounded-xl bg-custom-yellow py-3">Задать вопрос</Link>
+                <Link href="/faq/profiles" className="fixed right-20 bottom-10 animate-bounce text-center font-medium w-full max-w-[200px] rounded-xl bg-custom-yellow py-3">Задать вопрос</Link>
         </div>
     </>
   )

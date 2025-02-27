@@ -37,6 +37,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                 <Link href="/application">Подача заявки</Link>
                 <Link href="/article">Статьи</Link>
                 <Link href="/faq">FAQ</Link>
+                <Link href="/faq/profiles">Профили</Link>
             </div>
 
             {user ? (
@@ -87,6 +88,9 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     </Link>
                     <Link href="/faq" onClick={toggleMenu}>
                         FAQ
+                    </Link>
+                    <Link href="/faq/profiles" onClick={toggleMenu}>
+                        Профили
                     </Link>
                     <div className="flex gap-3 mt-6">
                         <Link href="/auth/login" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">

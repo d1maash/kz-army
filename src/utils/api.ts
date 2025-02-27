@@ -179,14 +179,17 @@ export const api = {
         return data;
     },
 
-    updateApplicationById: async (token: string, id: number, status: string) => {
+    updateApplicationById: async (id: number, status: string) => {
+        const token = localStorage.getItem('token')
+        if (!token) throw new Error('Требуется авторизация')
+        
         const response = await fetch(`${BASE_URL}/admin/applications/${id}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ status }),
+            body: JSON.stringify(status),
         });
 
         if (!response.ok) {
@@ -194,9 +197,25 @@ export const api = {
         }
 
         return await response.json();
-
-        
     }
+
+    // updateProfile: async (userData: any) => {
+    //     const token = localStorage.getItem('token')
+    //     if (!token) throw new Error('Требуется авторизация')
+
+    //     const response = await fetch(`${BASE_URL}/auth/me/`, {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${token}`,
+    //         },
+    //         body: JSON.stringify(userData),
+    //     })
+
+    //     const data = await response.json()
+    //     if (!response.ok) throw new Error(data.detail || 'Ошибка обновления профиля')
+    //     return data
+    // },
 }
 
 
