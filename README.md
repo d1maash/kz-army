@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+(Due to technical issues, the search service is temporarily unavailable.)
 
-## Getting Started
+Вот как модифицировать ваш код для реализации проверки прав администратора:
 
-First, run the development server:
+1. Обновите обработчик входа в `admin.tsx`:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```typescript
+const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+        // 1. Выполняем вход
+        const loginResponse = await api.login(username, password);
+        localStorage.setItem("token", loginResponse.access);
+
+        // 2. Получаем профиль пользователя
+        const profile = await api.getProfile();
+        
+        // 3. Проверяем флаг is_staff
+        if (profile.is_staff) {
+            router.push("/admin"); // Перенаправляем в админку
+        } else {
+            setError('You dont have enough permission for this');
+            localStorage.removeItem("token"); // Удаляем токен не-админа
+        }
+
+    } catch (err) {
+        if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('Произошла неизвестная ошибка');
+        }
+    }
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Убедитесь, что ваш API endpoint `/auth/profile/` возвращает поле `is_staff`. Для этого в Django нужно:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```python
+# serializers.py
+from rest_framework import serializers
+from .models import User
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'is_staff', 'status']  # Добавьте нужные поля
+```
 
-## Learn More
+3. Добавьте проверку прав в админ-роуты (рекомендуется). Создайте Higher-Order Component:
 
-To learn more about Next.js, take a look at the following resources:
+```typescript
+// components/AdminRoute.tsx
+"use client"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { api } from '@/utils/api'
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+export default function AdminRoute(WrappedComponent: React.ComponentType) {
+  return function ProtectedRoute() {
+    const router = useRouter()
+    const [isAllowed, setIsAllowed] = useState(false)
 
-## Deploy on Vercel
+    useEffect(() => {
+      const checkAdmin = async () => {
+        try {
+          const token = localStorage.getItem('token')
+          if (!token) throw new Error('Требуется авторизация')
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+          const profile = await api.getProfile()
+          if (!profile.is_staff) throw new Error('Доступ запрещен')
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+          setIsAllowed(true)
+        } catch (error) {
+          router.push('/admin/login')
+        }
+      }
+
+      checkAdmin()
+    }, [router])
+
+    return isAllowed ? <WrappedComponent /> : null
+  }
+}
+```
+
+Использование в админ-страницах:
+
+```typescript
+// app/admin/page.tsx
+import AdminRoute from '@/components/AdminRoute'
+import AdminDashboard from './AdminDashboard'
+
+export default AdminRoute(AdminDashboard)
+```
+
+4. Обновите API методы для лучшей обработки ошибок:
+
+```typescript
+// api.ts
+getProfile: async () => {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('Требуется авторизация')
+
+    try {
+        const response = await fetch(`${BASE_URL}/auth/profile/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            throw new Error('Сессия истекла')
+        }
+
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля')
+        
+        return data
+    } catch (error) {
+        throw new Error(error instanceof Error ? error.message : 'Ошибка сети')
+    }
+},
+```
+
+5. Добавьте logout функциональность:
+
+```typescript
+// api.ts
+logout: () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+},
+```
+
+Эти изменения обеспечат:
+- Проверку прав администратора при входе
+- Защиту админ-роутов
+- Корректную обработку истечения сессии
+- Безопасное хранение и удаление токенов
