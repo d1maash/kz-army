@@ -182,7 +182,7 @@ export const api = {
     updateApplicationById: async (id: number, status: string) => {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Требуется авторизация');
-    
+
         // Делаем Гет запрос
         const applicationResponse = await fetch(`${BASE_URL}/admin/applications/${id}`, {
             headers: {
@@ -190,19 +190,19 @@ export const api = {
                 'Content-Type': 'application/json',
             },
         });
-    
+
         if (!applicationResponse.ok) {
             throw new Error("Failed to fetch application data");
         }
-    
+
         const applicationData = await applicationResponse.json();
-    
+
         // Update the object with new status
         const updatedApplication = {
             ...applicationData,
             status, // Only updating the status
         };
-    
+
         // Send the full object as the API expects
         const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
             method: 'PUT',
@@ -212,15 +212,57 @@ export const api = {
             },
             body: JSON.stringify(updatedApplication),
         });
-    
+
         if (!response.ok) {
             throw new Error("Failed to update application status");
         }
-    
+
         return await response.json();
     },
-    
 
+    // Добавляем новый метод для создания заявки
+    createCommunication: async (formData: FormData) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        const response = await fetch(`${BASE_URL}/applications/applications/communications/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // Не устанавливаем Content-Type вручную!
+            },
+            body: formData,
+        });
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            let errorMessage = 'Ошибка при выполнении запроса';
+
+            if (data.detail) {
+                errorMessage = data.detail;
+            } else if (data.files) {
+                errorMessage = data.files.join(', ');
+            } else if (typeof data === 'object') {
+                errorMessage = Object.entries(data)
+                    .map(([field, errors]) =>
+                        `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`
+                    )
+                    .join('\n');
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return data;
+    },
 }
 
 

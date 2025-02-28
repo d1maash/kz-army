@@ -85,9 +85,9 @@ const ProfilePage = () => {
         <>
             <Navbar />
             <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
-                <h2 className="font-bold text-2xl">Мой профиль</h2>
+                <h2 className="font-bold text-2xl text-center md:text-left">Мой профиль</h2>
 
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex flex-col md:flex-row items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Image
                             src={userData.avatar || "/Ivan.png"}
@@ -96,11 +96,11 @@ const ProfilePage = () => {
                             height={50}
                             className="rounded-full"
                         />
-                        <div className="flex flex-col">
+                        <div className="flex items-center">
                             <h3 className="font-bold text-lg">
                                 {userData.full_name || "Пользователь"}
                             </h3>
-                            <p className="text-sm">
+                            <p className={`text-sm ml-5 ${userData.status === 'verified' ? 'text-green-500 border-green-500 border-2 px-2 rounded-md' : 'text-red-500 border-2 px-2 rounded-md'}`}>
                                 {userData.status === 'verified' ? 'Подтвержден' : 'Не подтвержден'}
                             </p>
                         </div>
@@ -108,7 +108,7 @@ const ProfilePage = () => {
 
                     <button
                         onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                        className="flex items-center gap-3 p-2 px-4 font-medium bg-custom-yellow rounded-xl"
+                        className="flex items-center gap-3 p-2 px-4 font-medium bg-custom-yellow rounded-xl mt-3 md:mt-0"
                     >
                         {isEditing ? 'Сохранить' : 'Редактировать'}
                         <Image
@@ -121,7 +121,7 @@ const ProfilePage = () => {
                 </div>
 
                 {errorMessage && (
-                    <div className="mt-4 text-red-500">{errorMessage}</div>
+                    <div className="mt-4 text-red-500 text-center md:text-left">{errorMessage}</div>
                 )}
 
                 {/* PROFILE INFORMATION */}
@@ -221,7 +221,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Остальная часть компонента без изменений */}
-            </div>
+            </div >
         </>
     )
 }

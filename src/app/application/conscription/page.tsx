@@ -18,6 +18,7 @@ const Conscription = () => {
     const [profile, setProfile] = useState<ProfileData | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
+    const [successPopup, setSuccessPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         full_name: "",
@@ -71,6 +72,20 @@ const Conscription = () => {
         }
     }
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+
+        if (value.length === 0) {
+            setFormData({ ...formData, phone: "+7" });
+        } else if (value.startsWith("+7") && value.length <= 13) {
+            setFormData({ ...formData, phone: value });
+        } else if (value.startsWith("+7") && value.length > 13) {
+            setFormData({ ...formData, phone: value.slice(0, 13) });
+        } else {
+            setFormData({ ...formData, phone: "+7" + value.replace(/\D/g, "").slice(2) });
+        }
+    };
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const files = Array.from(e.target.files)
@@ -97,8 +112,6 @@ const Conscription = () => {
         }
 
         const form = new FormData()
-
-        // Добавляем текстовые поля напрямую в FormData
         form.append("full_name", formData.full_name)
         form.append("birth_date", formData.birth_date)
         form.append("email", formData.email)
@@ -107,9 +120,8 @@ const Conscription = () => {
         form.append("comment", formData.comment)
         form.append("has_postponement", String(formData.has_postponement))
 
-        // Добавляем файлы с правильным именем поля
         formData.files.forEach((file) => {
-            form.append("files", file) // Множественное число - files!
+            form.append("files", file)
         })
 
         try {
@@ -119,7 +131,11 @@ const Conscription = () => {
             )
 
             console.log("Успешная отправка:", response)
-            alert("Заявка успешно отправлена!")
+            setSuccessPopup(true);
+            setTimeout(() => {
+                setSuccessPopup(false);
+                window.location.reload();
+            }, 3000);
 
         } catch (err: any) {
             console.error("Ошибка отправки:", err)
@@ -206,13 +222,12 @@ const Conscription = () => {
                         <div className="w-full mt-3 grid md:grid-cols-2 gap-6">
                             <div className="flex flex-col gap-3">
                                 <input
-                                    type="tel"
-                                    placeholder="Телефон (+7XXXXXXXXXX)"
+                                    type="text"
+                                    placeholder="Контактный телефон"
                                     name="phone"
                                     value={formData.phone}
-                                    onChange={handleInputChange}
+                                    onChange={handlePhoneChange}
                                     className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3"
-                                    pattern="^\+7\d{10}$"
                                     required
                                 />
                                 <input
@@ -268,6 +283,13 @@ const Conscription = () => {
                         >
                             Отправить заявку
                         </button>
+
+                        {/* Поп-ап для успешной отправки */}
+                        {successPopup && (
+                            <div className="fixed top-0 left-0 right-0 mt-20 mx-auto w-1/2 bg-green-500 text-white text-center p-4 rounded">
+                                Данные успешно отправлены!
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>

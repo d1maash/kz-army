@@ -30,7 +30,6 @@ export default function Home() {
                             title={card.title}
                             description={card.description}
                             image={card.image}
-                            isFirstCard={index === 0}
                         />
                     ))}
                 </div>
@@ -47,7 +46,7 @@ export default function Home() {
                 {/* Steps Cards */}
                 <div className="mt-20 grid lg:grid-cols-2 max-w-4xl mx-auto justify-center items-center gap-10">
                     {stepCards.map((card) => (
-                        <StepCard 
+                        <StepCard
                             key={card.id}
                             title={card.title}
                             description={card.description}
@@ -65,7 +64,7 @@ export default function Home() {
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
                     {serviceCards.map((card) => (
-                        <ServiceCard 
+                        <ServiceCard
                             key={card.id}
                             title={card.title}
                             description={card.description}
