@@ -64,12 +64,10 @@ export default function Home() {
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
-                    {serviceCards.map((card) => (
+                    {serviceCards.map((article) => (
                         <ServiceCard 
-                            key={card.id}
-                            title={card.title}
-                            description={card.description}
-                            image={card.image}
+                            key={article.id}
+                            article={article}
                         />
                     ))}
                 </div>
