@@ -166,8 +166,8 @@ export const api = {
         }
     },
     // Admin методы:
-    getApplications: async (token: string) => {
-        const response = await fetch(`${BASE_URL}/admin/applications/`, {
+    getApplications: async (token: string, page: number, pageSize: number) => {
+        const response = await fetch(`${BASE_URL}/admin/applications/?page=${page}&page_size=${pageSize}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -219,6 +219,38 @@ export const api = {
 
         return await response.json();
     },
+
+    deleteApplicationById: async (id: number) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete application");
+        }
+
+        return true;
+    },
+
+
+    // Articles методы:
+    getArticles: async () => {
+        const response = await fetch(`${BASE_URL}/articles/`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
+        return data;
+    },
+
 
     // Добавляем новый метод для создания заявки
     createCommunication: async (formData: FormData) => {

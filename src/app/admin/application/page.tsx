@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Trash2 } from "lucide-react";
 import { api } from "@/utils/api";
 import ApplicationDetailsModal from "./ApplicationModal";
 import {
@@ -25,9 +25,17 @@ import {
 import { Button } from "@/components/ui/button";
 
 const AdminApplication = () => {
+    // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Delete dropdown state
+    const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+
     const [selectedApplication, setSelectedApplication] = useState(null);
+    
     const [applications, setApplications] = useState<{ count: number, results: any[] }>({ count: 0, results: [] });
+    const [allApplications, setAllApplications] = useState<any[]>([]);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const pageSize = 12;
@@ -44,12 +52,25 @@ const AdminApplication = () => {
     };
 
     // GET APPLICATIONS
-    const handleApplications = async (page = 1) => {
+    const handleApplications = async () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await api.getApplications(token, page, pageSize);
-                setApplications(response);
+                let page = 1;
+                let allResults: any[] = [];
+                let totalCount = 0;
+    
+                while (true) {
+                    const response = await api.getApplications(token, page, pageSize);
+                    allResults = [...allResults, ...response.results];
+                    totalCount = response.count;
+                    
+                    if (!response.next) break;
+                    page++;
+                }
+    
+                setApplications({ count: totalCount, results: allResults });
+                setAllApplications(allResults);
             } catch (error) {
                 console.error(error);
             }
@@ -59,27 +80,41 @@ const AdminApplication = () => {
     };
     
     useEffect(() => {
-        handleApplications(currentPage);
-    }, [currentPage]);
+        handleApplications();
+    }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery])
 
     // SEARCH and PAGINATION 
-    const filteredApplications = applications.results.filter(app =>
+    const filteredApplications = allApplications.filter(app =>
         app.full_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    
     const totalPages = Math.ceil(filteredApplications.length / pageSize);
+    
+    const paginatedApplications = filteredApplications.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
 
+    // Pagination handlers
     const handlePrevious = () => {
-        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
     };
     
     const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
     };
 
     // EXCEL EXPORT
     const handleExport = () => {
-        const worksheet = XLSX.utils.json_to_sheet(applications.results);
+        const worksheet = XLSX.utils.json_to_sheet(filteredApplications);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
         XLSX.writeFile(workbook, "applications.xlsx");
@@ -104,8 +139,25 @@ const AdminApplication = () => {
                     app.id === id ? { ...app, status: newStatus } : app
                 ),
             }));
+            setAllApplications(prev =>
+                prev.map(app => app.id === id ? { ...app, status: newStatus} : app)
+            )
         } catch (error) {
             console.error(error);
+        }
+    };
+
+    // DELETE APPLICATION
+    const handleDelete = async (id: number) => {
+        try {
+            await api.deleteApplicationById(id);
+            setApplications(prev => ({
+                count: prev.count - 1,
+                results: prev.results.filter(app => app.id !== id), // Remove from UI
+            }));
+            setAllApplications(prev => prev.filter(app => app.id !== id))
+        } catch (error) {
+            console.error("Error deleting application:", error);
         }
     };
 
@@ -138,7 +190,7 @@ const AdminApplication = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredApplications.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) => (
+                        {paginatedApplications.map((item) => (
                             <TableRow key={item?.id}>
                                 <TableCell>{item?.id}</TableCell>
                                 <TableCell
@@ -149,13 +201,9 @@ const AdminApplication = () => {
                                 </TableCell>
                                 <TableCell>{new Date(item?.submitted_at).toLocaleDateString("ru-RU")}</TableCell>
                                 <TableCell>{item?.application_type === "conscription" ? "Срочная служба" : "Связист"}</TableCell>
+                                
+                                {/* Application status change */}
                                 <TableCell>
-                                    {/* <button className={`rounded-xl font-semibold p-1 px-3 ${
-                                        item?.status === "approved" ? "text-[#277C00] bg-[#E0FFD1]" :
-                                        item?.status === "in_review" ? "text-[#9F5000] bg-[#FFE7CE]" : "text-[#9F0000] bg-[#FFDCDC]"}`}
-                                    >
-                                        {item?.status === "in_review" ? "В обработке" : item?.status === "approved" ? "Одобрена" : "Отклонена"}
-                                    </button> */}
                                     <div className="relative inline-block">
                                         <button
                                             className={`rounded-xl font-semibold p-1 px-3 w-full text-left ${
@@ -184,8 +232,27 @@ const AdminApplication = () => {
                                         </select>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    <Ellipsis className="mx-auto size-5" />
+                                
+                                {/* Delete button */}
+                                <TableCell className="text-center relative">
+                                    <div
+                                        className="inline-block cursor-pointer p-2"
+                                        onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
+                                    >
+                                        <Ellipsis className="mx-auto size-5" />
+                                    </div>
+
+                                    {openDropdown === item.id && (
+                                        <div className="absolute right-0 mt-2 bg-white border shadow-lg rounded-lg p-2 z-10">
+                                            <button
+                                                onClick={() => handleDelete(item.id)}
+                                                className="flex items-center gap-2 px-3 py-2 font-semibold text-red-600 hover:bg-red-100 rounded-md"
+                                            >
+                                                <Trash2 className="size-4" />
+                                                Удалить
+                                            </button>
+                                        </div>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
