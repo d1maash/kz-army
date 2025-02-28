@@ -19,7 +19,7 @@ interface UserData {
     first_name?: string;
     last_name?: string;
     middle_name?: string;
-    birth_date?: string;
+    birth_date?: string,
     iin?: string;
     phone?: string;
     address?: string;
