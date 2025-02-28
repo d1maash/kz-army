@@ -180,42 +180,47 @@ export const api = {
     },
 
     updateApplicationById: async (id: number, status: string) => {
-        const token = localStorage.getItem('token')
-        if (!token) throw new Error('Требуется авторизация')
-        
-        const response = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+    
+        // Делаем Гет запрос
+        const applicationResponse = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+    
+        if (!applicationResponse.ok) {
+            throw new Error("Failed to fetch application data");
+        }
+    
+        const applicationData = await applicationResponse.json();
+    
+        // Update the object with new status
+        const updatedApplication = {
+            ...applicationData,
+            status, // Only updating the status
+        };
+    
+        // Send the full object as the API expects
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(status),
+            body: JSON.stringify(updatedApplication),
         });
-
+    
         if (!response.ok) {
             throw new Error("Failed to update application status");
         }
-
+    
         return await response.json();
-    }
+    },
+    
 
-    // updateProfile: async (userData: any) => {
-    //     const token = localStorage.getItem('token')
-    //     if (!token) throw new Error('Требуется авторизация')
-
-    //     const response = await fetch(`${BASE_URL}/auth/me/`, {
-    //         method: 'PUT',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${token}`,
-    //         },
-    //         body: JSON.stringify(userData),
-    //     })
-
-    //     const data = await response.json()
-    //     if (!response.ok) throw new Error(data.detail || 'Ошибка обновления профиля')
-    //     return data
-    // },
 }
 
 

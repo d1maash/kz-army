@@ -20,7 +20,7 @@ const FaqProfileCard = ({ name, role, image }: FaqProfileCardType) => {
   return (
     <>
       {isModalOpen && <FaqProfileModal name={name} close={handleClose} />}
-      <div className="w-full py-3 px-5 flex flex-col items-center justify-center bg-[#F7F7F7] rounded-xl">
+      <div className="w-full py-3 px-5 flex flex-col items-center justify-between bg-[#F7F7F7] rounded-xl">
         <Image 
           src={image}
           alt="profile"
