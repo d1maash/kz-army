@@ -6,32 +6,49 @@ import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
 
 const AdminPage = () => {
-  const [applications, setApplications] = useState({ count: 0, results: [] })
-  
+  const [applications, setApplications] = useState({ count: 0, results: [] });
+  const pageSize = 20; // Should match your backend's default page size
+
+  const fetchAllApplications = async (token: string) => {
+    let allResults: any[] = [];
+    let currentPage = 1;
+    let totalCount = 0;
+
+    try {
+      while (true) {
+        const response = await api.getApplications(token, currentPage, pageSize);
+        allResults = [...allResults, ...response.results];
+        totalCount = response.count;
+        
+        if (!response.next) break; // Stop if no more pages
+        currentPage++;
+      }
+      
+      return { count: totalCount, results: allResults };
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      return { count: 0, results: [] };
+    }
+  };
+
   const handleApplications = async () => {
     const token = localStorage.getItem('token');
     if (token) {
-      try {
-        const applications = await api.getApplications(token);
-        setApplications(applications)
-        // console.log(applications)  
-      } catch (error) {
-        console.error(error)
-      }
+      const data = await fetchAllApplications(token);
+      setApplications(data);
     } else {
-      console.error("authorization required")
+      console.error("Authorization required");
     }
-  }
+  };
 
   useEffect(() => {
-      handleApplications();
-  }, [])
+    handleApplications();
+  }, []);
 
+  // Calculate statistics from complete dataset
   const inReviewCount = applications.results.filter(app => app.status === "in_review").length;
   const acceptedCount = applications.results.filter(app => app.status === "approved").length;
   const rejectedCount = applications.results.filter(app => app.status === "rejected").length;
-
-
 
   return (
     <div>
