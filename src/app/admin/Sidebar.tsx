@@ -24,7 +24,7 @@ const Sidebar = () => {
                             width={20}
                             height={20}
                         /> 
-                        <p className="hidden sm:block">Главная</p>
+                        <p className="hidden md:block">Главная</p>
                     </a>
                 </li>
                 <li 
@@ -39,7 +39,7 @@ const Sidebar = () => {
                             width={20}
                             height={20}
                         /> 
-                        <p className="hidden sm:block">Заявки</p>
+                        <p className="hidden md:block">Заявки</p>
                     </a>
                 </li> 
                 <li className="mb-2 rounded-xl p-2 px-3 md:px-5">
@@ -50,7 +50,7 @@ const Sidebar = () => {
                             width={20}
                             height={20}
                         /> 
-                        <p className="hidden sm:block">Вопросы</p>
+                        <p className="hidden md:block">Вопросы</p>
                     </a>
                 </li>
             </ul>

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 const Footer = () => {
@@ -17,8 +18,26 @@ const Footer = () => {
                     </ul>
 
                     {/* Social */}
-                    <ul className="flex flex-col">
+                    <ul className="flex flex-col gap-3">
                         <h3 className="font-bold">Наши соц-сети</h3>
+                        <Link href="" className="flex gap-1 items-center text-sm">
+                            <Image 
+                                src="/icons/telegram.svg"
+                                alt="telegram"
+                                width={20}
+                                height={20}
+                            />
+                            @username
+                        </Link>
+                        <Link href="" className="flex gap-1 items-center text-sm">
+                            <Image 
+                                src="/icons/instagram.svg"
+                                alt="telegram"
+                                width={20}
+                                height={20}
+                            />
+                            @username
+                        </Link>
                     </ul>
                 </div>
 

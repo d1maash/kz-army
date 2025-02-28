@@ -13,7 +13,7 @@ const AskQuestion = () => {
             <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
             <h2 className="text-3xl md:text-4xl font-bold mt-5">Вопросы представителям министерства обороны</h2>
 
-            <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="mt-5 grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {faqProfileCards.map((profile) => (
                     <FaqProfileCard 
                         key={profile.id}

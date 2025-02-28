@@ -24,6 +24,7 @@ interface UserData {
     phone?: string;
     address?: string;
     avatar?: string;
+    status?: string;
 }
 
 const ProfilePage = () => {
@@ -99,7 +100,9 @@ const ProfilePage = () => {
                             <h3 className="font-bold text-lg">
                                 {userData.full_name || "Пользователь"}
                             </h3>
-                            <p className="text-sm">Связист</p>
+                            <p className="text-sm">
+                                {userData.status === 'verified' ? 'Подтвержден' : 'Не подтвержден'}
+                            </p>
                         </div>
                     </div>
 

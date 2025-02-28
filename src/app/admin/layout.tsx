@@ -26,16 +26,18 @@ export default function AdminLayout({
         if (!token) throw new Error('Требуется авторизация');
 
         const profile = await api.getProfile();
-        console.log(profile)
+        const is_admin = localStorage.getItem('is_admin');
+        // console.log(profile)
         // is_staff нету в auth/me 
-        if (profile.status !== "unverified") throw new Error('Доступ запрещен');
+        if (!is_admin) throw new Error('Доступ запрещен') 
+        if (profile.status === "unverified") throw new Error('Доступ запрещен');
 
-        setIsAllowed(true); // Allow access if the user is an admin
+        setIsAllowed(true);
       } catch (error) {
         console.error(error);
-        router.push('/auth/admin-login'); // Redirect to login if there's an error
+        router.push('/auth/admin-login');
       } finally {
-        setIsChecking(false); // Mark the check as complete
+        setIsChecking(false); 
       }
     };
 
@@ -47,7 +49,7 @@ export default function AdminLayout({
   }
 
   if (!isAllowed) {
-    console.log("IDI")
+    console.log("IDI lil bro")
   }
     
 

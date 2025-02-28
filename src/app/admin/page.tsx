@@ -28,28 +28,13 @@ const AdminPage = () => {
   }, [])
 
   const inReviewCount = applications.results.filter(app => app.status === "in_review").length;
-  const acceptedCount = applications.results.filter(app => app.status === "accepted").length;
+  const acceptedCount = applications.results.filter(app => app.status === "approved").length;
   const rejectedCount = applications.results.filter(app => app.status === "rejected").length;
 
 
 
   return (
     <div>
-        <form action="#">
-            <input 
-              type="text"
-              placeholder="Поиск" 
-              className="w-full p-3 pl-10 rounded-xl bg-[#F7F7F7]"
-              style={{
-                backgroundImage: "url('/icons/search.svg')",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "10px center", 
-                backgroundSize: "20px 20px", 
-            }}
-          />
-
-        </form>
-
         <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
                 <h2 className="font-bold text-5xl">{applications.count}</h2>

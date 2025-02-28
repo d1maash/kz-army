@@ -21,7 +21,7 @@ const Profile = () => {
             try {
                 const profile = await api.getProfile();
                 setUserData(profile);
-                console.log(profile)
+                // console.log(profile)
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
                 router.push("/admin/login");

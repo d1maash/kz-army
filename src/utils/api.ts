@@ -178,6 +178,49 @@ export const api = {
         if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
         return data;
     },
+
+    updateApplicationById: async (id: number, status: string) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+    
+        // Делаем Гет запрос
+        const applicationResponse = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+    
+        if (!applicationResponse.ok) {
+            throw new Error("Failed to fetch application data");
+        }
+    
+        const applicationData = await applicationResponse.json();
+    
+        // Update the object with new status
+        const updatedApplication = {
+            ...applicationData,
+            status, // Only updating the status
+        };
+    
+        // Send the full object as the API expects
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedApplication),
+        });
+    
+        if (!response.ok) {
+            throw new Error("Failed to update application status");
+        }
+    
+        return await response.json();
+    },
+    
+
 }
 
 
