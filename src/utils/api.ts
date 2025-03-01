@@ -166,8 +166,8 @@ export const api = {
         }
     },
     // Admin методы:
-    getApplications: async (token: string) => {
-        const response = await fetch(`${BASE_URL}/admin/applications/`, {
+    getApplications: async (token: string, page: number, pageSize: number) => {
+        const response = await fetch(`${BASE_URL}/admin/applications/?page=${page}&page_size=${pageSize}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -179,14 +179,38 @@ export const api = {
         return data;
     },
 
-    updateApplicationById: async (token: string, id: number, status: string) => {
-        const response = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+    updateApplicationById: async (id: number, status: string) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        // Делаем Гет запрос
+        const applicationResponse = await fetch(`${BASE_URL}/admin/applications/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!applicationResponse.ok) {
+            throw new Error("Failed to fetch application data");
+        }
+
+        const applicationData = await applicationResponse.json();
+
+        // Update the object with new status
+        const updatedApplication = {
+            ...applicationData,
+            status, // Only updating the status
+        };
+
+        // Send the full object as the API expects
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ status }),
+            body: JSON.stringify(updatedApplication),
         });
 
         if (!response.ok) {
@@ -194,9 +218,83 @@ export const api = {
         }
 
         return await response.json();
+    },
 
-        
-    }
+    deleteApplicationById: async (id: number) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        const response = await fetch(`${BASE_URL}/admin/applications/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete application");
+        }
+
+        return true;
+    },
+
+
+    // Articles методы:
+    getArticles: async () => {
+        const response = await fetch(`${BASE_URL}/articles/`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
+        return data;
+    },
+
+
+    // Добавляем новый метод для создания заявки
+    createCommunication: async (formData: FormData) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        const response = await fetch(`${BASE_URL}/applications/applications/communications/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // Не устанавливаем Content-Type вручную!
+            },
+            body: formData,
+        });
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            let errorMessage = 'Ошибка при выполнении запроса';
+
+            if (data.detail) {
+                errorMessage = data.detail;
+            } else if (data.files) {
+                errorMessage = data.files.join(', ');
+            } else if (typeof data === 'object') {
+                errorMessage = Object.entries(data)
+                    .map(([field, errors]) =>
+                        `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`
+                    )
+                    .join('\n');
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return data;
+    },
 }
 
 

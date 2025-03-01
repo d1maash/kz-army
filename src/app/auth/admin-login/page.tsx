@@ -1,8 +1,8 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+// import Link from "next/link";
+import { useState, useEffect, useCallback } from "react";
 import { api } from "@/utils/api";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ const AdminLogin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
-    const pathname = usePathname();
+    // const pathname = usePathname(); // Remove this line if not used
 
     // Password toggle
     const togglePasswordVisibility = () => {
@@ -20,24 +20,26 @@ const AdminLogin = () => {
     };
 
     // Main function
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-    
+
         try {
             // 1. Выполняем вход
             const loginResponse = await api.login(username, password);
             localStorage.setItem("token", loginResponse.access);
             console.log(loginResponse);
             if (loginResponse.is_admin) {
+                // is_admin для будущего
+                localStorage.setItem('is_admin', loginResponse.is_admin);
                 localStorage.setItem('user', JSON.stringify({ username }));
                 // Redirect to the admin dashboard regardless of current path
-                router.push('/admin'); // Or '/admin/application' if preferred
+                router.push('/admin');
             } else {
                 setError('You dont have enough permission for this');
                 localStorage.removeItem("token");
             }
-    
+
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -45,11 +47,15 @@ const AdminLogin = () => {
                 setError('Произошла неизвестная ошибка');
             }
         }
-    };
+    }, [username, password, router]);
 
     // function handleLogin() {
     //     alert('salam')
     // }
+
+    useEffect(() => {
+        // Your logic here
+    }, [handleLogin]); // Add handleLogin if it's defined outside
 
     return (
         <>

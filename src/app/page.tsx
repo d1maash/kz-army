@@ -24,13 +24,12 @@ export default function Home() {
 
                 {/* Cards */}
                 <div className="mt-10 flex justify-center gap-5 items-center flex-wrap lg:flex-nowrap">
-                    {importantCards.map((card, index) => (
+                    {importantCards.map((card) => (
                         <ImportantCard
                             key={card.id}
                             title={card.title}
                             description={card.description}
                             image={card.image}
-                            isFirstCard={index === 0}
                         />
                     ))}
                 </div>
@@ -47,7 +46,7 @@ export default function Home() {
                 {/* Steps Cards */}
                 <div className="mt-20 grid lg:grid-cols-2 max-w-4xl mx-auto justify-center items-center gap-10">
                     {stepCards.map((card) => (
-                        <StepCard 
+                        <StepCard
                             key={card.id}
                             title={card.title}
                             description={card.description}
@@ -64,12 +63,10 @@ export default function Home() {
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
-                    {serviceCards.map((card) => (
-                        <ServiceCard 
-                            key={card.id}
-                            title={card.title}
-                            description={card.description}
-                            image={card.image}
+                    {serviceCards.map((article) => (
+                        <ServiceCard
+                            key={article.id}
+                            article={article}
                         />
                     ))}
                 </div>

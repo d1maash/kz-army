@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { api } from "@/utils/api";
 import Image from "next/image";
 
@@ -11,7 +11,6 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
     const router = useRouter();
 
     // Password toggle
@@ -22,7 +21,6 @@ const Login = () => {
     // Main function
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
-        setError('')
 
         try {
             const response = await api.login(username, password)
@@ -30,7 +28,7 @@ const Login = () => {
             localStorage.setItem('user', JSON.stringify({ username }))
             router.push('/profile') // Изменили редирект на профиль
         } catch (err) {
-            setError('Ошибка входа. Проверьте данные.')
+            // const err = ...; // Удалите, если не используется
         }
     }
 
@@ -41,7 +39,6 @@ const Login = () => {
                 <div className="w-full mx-10 md:w-1/3 p-12 bg-white rounded-xl shadow-lg text-center">
                     <h3 className="font-bold text-xl">Войти</h3>
                     <p className="text-[#7D7D7D]">Напишите ваш логин и пароль</p>
-                    {error && <p style={{ color: "red" }}>{error}</p>}
                     <form onSubmit={handleLogin} className="mt-6">
                         <input
                             type="text"
