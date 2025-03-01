@@ -1,0 +1,1 @@
+const apiUrl = 'https://yourdomain.com/api/auth/login/'; // Point to the reverse proxy 

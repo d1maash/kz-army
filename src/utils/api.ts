@@ -1,4 +1,4 @@
-const BASE_URL = 'http://89.46.33.188/api';
+const BASE_URL = 'https://89.46.33.188/api';
 
 const request = async (endpoint: string, method = 'GET', body?: any, token?: string) => {
     const headers: HeadersInit = {
