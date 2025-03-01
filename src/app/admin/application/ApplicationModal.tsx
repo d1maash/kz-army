@@ -1,11 +1,12 @@
 import { X } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { ApplicationType } from './types';
 
 interface ApplicationDetailsModalProps {
     isOpen: boolean;
     onClose: () => void;
-    application: any;
+    application: ApplicationType;
 }
 
 const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
@@ -20,7 +21,7 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
             <div className="relative bg-white mx-3 p-6 rounded-lg w-full max-w-md">
                 <X className="absolute top-3 right-3" onClick={onClose} />
                 <div className="flex items-center gap-3">
-                    <Image 
+                    <Image
                         src="/Ivan.png"
                         alt="ivan"
                         width={50}
@@ -31,7 +32,7 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
                         <p>{application.type === "conscription" ? "Срочная служба" : "Связист"}</p>
                     </div>
                 </div>
-                
+
                 <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">
                     <div className="flex flex-col">
                         <div>ФИО</div>
@@ -69,3 +70,4 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
 };
 
 export default ApplicationDetailsModal;
+

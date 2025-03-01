@@ -5,8 +5,13 @@ import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 
+interface UserData {
+    full_name: string;
+    // другие поля...
+}
+
 const Profile = () => {
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState<UserData | null>(null);
     const router = useRouter();
 
     useEffect(() => {

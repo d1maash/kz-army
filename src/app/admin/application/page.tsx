@@ -23,6 +23,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
+import { ApplicationType } from './types'; // Adjust the path if necessary
 
 const AdminApplication = () => {
     // Modal state
@@ -31,17 +32,17 @@ const AdminApplication = () => {
     // Delete dropdown state
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
-    const [selectedApplication, setSelectedApplication] = useState(null);
-    
-    const [applications, setApplications] = useState<{ count: number, results: any[] }>({ count: 0, results: [] });
-    const [allApplications, setAllApplications] = useState<any[]>([]);
+    const [selectedApplication, setSelectedApplication] = useState<ApplicationType | null>(null);
+
+    const [applications, setApplications] = useState<{ count: number; results: ApplicationType[] }>({ count: 0, results: [] });
+    const [allApplications, setAllApplications] = useState<ApplicationType[]>([]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const pageSize = 12;
 
     // MODAL
-    const handleNameClick = (application) => {
+    const handleNameClick = (application: ApplicationType) => {
         setSelectedApplication(application);
         setIsModalOpen(true);
     };
@@ -57,18 +58,18 @@ const AdminApplication = () => {
         if (token) {
             try {
                 let page = 1;
-                let allResults: any[] = [];
+                let allResults: ApplicationType[] = [];
                 let totalCount = 0;
-    
+
                 while (true) {
                     const response = await api.getApplications(token, page, pageSize);
                     allResults = [...allResults, ...response.results];
                     totalCount = response.count;
-                    
+
                     if (!response.next) break;
                     page++;
                 }
-    
+
                 setApplications({ count: totalCount, results: allResults });
                 setAllApplications(allResults);
             } catch (error) {
@@ -78,7 +79,7 @@ const AdminApplication = () => {
             console.error("Authorization required");
         }
     };
-    
+
     useEffect(() => {
         handleApplications();
     }, []);
@@ -91,9 +92,9 @@ const AdminApplication = () => {
     const filteredApplications = allApplications.filter(app =>
         app.full_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    
+
     const totalPages = Math.ceil(filteredApplications.length / pageSize);
-    
+
     const paginatedApplications = filteredApplications.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
@@ -105,7 +106,7 @@ const AdminApplication = () => {
             setCurrentPage(prev => prev - 1);
         }
     };
-    
+
     const handleNext = () => {
         if (currentPage < totalPages) {
             setCurrentPage(prev => prev + 1);
@@ -123,15 +124,15 @@ const AdminApplication = () => {
     // APPLICATION STATUS CHANGE
     const handleStatusChange = async (id: number, newStatus: string) => {
         const token = localStorage.getItem('token');
-    
+
         if (!token) {
             console.error("Authorization required");
             return;
         }
-    
+
         try {
             await api.updateApplicationById(id, newStatus);
-    
+
             // Ensure proper type structure
             setApplications(prev => ({
                 count: prev.count, // Keep the count unchanged
@@ -140,7 +141,7 @@ const AdminApplication = () => {
                 ),
             }));
             setAllApplications(prev =>
-                prev.map(app => app.id === id ? { ...app, status: newStatus} : app)
+                prev.map(app => app.id === id ? { ...app, status: newStatus } : app)
             )
         } catch (error) {
             console.error(error);
@@ -201,24 +202,23 @@ const AdminApplication = () => {
                                 </TableCell>
                                 <TableCell>{new Date(item?.submitted_at).toLocaleDateString("ru-RU")}</TableCell>
                                 <TableCell>{item?.application_type === "conscription" ? "Срочная служба" : "Связист"}</TableCell>
-                                
+
                                 {/* Application status change */}
                                 <TableCell>
                                     <div className="relative inline-block">
                                         <button
-                                            className={`rounded-xl font-semibold p-1 px-3 w-full text-left ${
-                                                item?.status === "approved"
-                                                    ? "text-[#277C00] bg-[#E0FFD1]"
-                                                    : item?.status === "in_review"
+                                            className={`rounded-xl font-semibold p-1 px-3 w-full text-left ${item?.status === "approved"
+                                                ? "text-[#277C00] bg-[#E0FFD1]"
+                                                : item?.status === "in_review"
                                                     ? "text-[#9F5000] bg-[#FFE7CE]"
                                                     : "text-[#9F0000] bg-[#FFDCDC]"
-                                            }`}
+                                                }`}
                                         >
                                             {item?.status === "in_review"
                                                 ? "В обработке"
                                                 : item?.status === "approved"
-                                                ? "Одобрена"
-                                                : "Отклонена"}
+                                                    ? "Одобрена"
+                                                    : "Отклонена"}
                                         </button>
 
                                         <select
@@ -232,7 +232,7 @@ const AdminApplication = () => {
                                         </select>
                                     </div>
                                 </TableCell>
-                                
+
                                 {/* Delete button */}
                                 <TableCell className="text-center relative">
                                     <div
@@ -261,20 +261,19 @@ const AdminApplication = () => {
                 <Pagination className="mt-5">
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious 
-                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"  
-                                onClick={handlePrevious} 
-                                // disabled={currentPage === 1} 
+                            <PaginationPrevious
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                onClick={handlePrevious}
+                            // disabled={currentPage === 1} 
                             />
                         </PaginationItem>
                         {[...Array(totalPages)].map((_, index) => (
                             <PaginationItem key={index}>
-                                <PaginationLink 
-                                    className={`border-2 ${
-                                        currentPage === index + 1 
-                                            ? 'border-custom-yellow text-custom-yellow' 
-                                            : 'border-[#E8E7DF] hover:border-custom-yellow'
-                                    }`}  
+                                <PaginationLink
+                                    className={`border-2 ${currentPage === index + 1
+                                        ? 'border-custom-yellow text-custom-yellow'
+                                        : 'border-[#E8E7DF] hover:border-custom-yellow'
+                                        }`}
                                     onClick={() => setCurrentPage(index + 1)}
                                 >
                                     {index + 1}
@@ -282,10 +281,10 @@ const AdminApplication = () => {
                             </PaginationItem>
                         ))}
                         <PaginationItem>
-                            <PaginationNext 
-                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"  
-                                onClick={handleNext} 
-                                // disabled={currentPage === totalPages} 
+                            <PaginationNext
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                onClick={handleNext}
+                            // disabled={currentPage === totalPages} 
                             />
                         </PaginationItem>
                     </PaginationContent>

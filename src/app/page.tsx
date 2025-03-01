@@ -24,7 +24,7 @@ export default function Home() {
 
                 {/* Cards */}
                 <div className="mt-10 flex justify-center gap-5 items-center flex-wrap lg:flex-nowrap">
-                    {importantCards.map((card, index) => (
+                    {importantCards.map((card) => (
                         <ImportantCard
                             key={card.id}
                             title={card.title}

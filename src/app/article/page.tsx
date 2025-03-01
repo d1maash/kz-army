@@ -14,20 +14,32 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
+interface Article {
+    id: number; // или number, в зависимости от вашего API
+    // другие поля...
+}
+
+interface UserData {
+    full_name: string;
+    // другие поля...
+}
+
 const Article = () => {
-    const [articles, setArticles] = useState([]) // Store all articles
+    const [articles, setArticles] = useState<Article[]>([]) // Store all articles
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const articlesPerPage = 6 // Number of articles per page
+    const [userData, setUserData] = useState<UserData | null>(null);
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
                 const data = await api.getArticles()
                 setArticles(data.results) // Store the full list
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Ошибка загрузки")
+            } catch (error) {
+                const err = error as Error; // Приведение типа
+                setError(err.message || "Ошибка загрузки")
             } finally {
                 setLoading(false)
             }
@@ -63,44 +75,43 @@ const Article = () => {
 
                 <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                     {error && <p>{error}</p>}
-                    {paginatedArticles.map((article) => (
+                    {paginatedArticles.map((article: Article) => (
                         <ServiceCard key={article.id} article={article} />
                     ))}
                 </div>
 
                 {/* Pagination */}
-                    <Pagination className="mt-5">
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
-                                    onClick={handlePrevious}
-                                    // disabled={currentPage === 1}
-                                />
-                            </PaginationItem>
-                            {[...Array(totalPages)].map((_, index) => (
-                                <PaginationItem key={index}>
-                                    <PaginationLink
-                                        className={`border-2 ${
-                                            currentPage === index + 1
-                                                ? "border-custom-yellow text-custom-yellow"
-                                                : "border-[#E8E7DF] hover:border-custom-yellow"
+                <Pagination className="mt-5">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                onClick={handlePrevious}
+                            // disabled={currentPage === 1}
+                            />
+                        </PaginationItem>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <PaginationItem key={index}>
+                                <PaginationLink
+                                    className={`border-2 ${currentPage === index + 1
+                                        ? "border-custom-yellow text-custom-yellow"
+                                        : "border-[#E8E7DF] hover:border-custom-yellow"
                                         }`}
-                                        onClick={() => setCurrentPage(index + 1)}
-                                    >
-                                        {index + 1}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext
-                                    className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
-                                    onClick={handleNext}
-                                    // disabled={currentPage === totalPages}
-                                />
+                                    onClick={() => setCurrentPage(index + 1)}
+                                >
+                                    {index + 1}
+                                </PaginationLink>
                             </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                        ))}
+                        <PaginationItem>
+                            <PaginationNext
+                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                onClick={handleNext}
+                            // disabled={currentPage === totalPages}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
         </>
     )
