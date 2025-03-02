@@ -1,1 +1,1 @@
-const apiUrl = 'https://yourdomain.com/api/auth/login/'; // Point to the reverse proxy 
+const apiUrl = '/api/auth'; // Call the Vercel function 
