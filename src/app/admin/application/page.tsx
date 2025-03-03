@@ -169,6 +169,12 @@ const AdminApplication = () => {
                     type="text"
                     placeholder="Поиск"
                     className="w-full p-3 pl-10 shadow-sm rounded-xl bg-[#F7F7F7]"
+                    style={{
+                        backgroundImage: "url('/icons/search.svg')",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "10px center",
+                        backgroundSize: "20px 20px",
+                    }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />

@@ -42,8 +42,12 @@ const Sidebar = () => {
                         <p className="hidden md:block">Заявки</p>
                     </a>
                 </li> 
-                <li className="mb-2 rounded-xl p-2 px-3 md:px-5">
-                    <a href="/admin" className="hover:text-gray-400 flex items-center gap-3">
+                <li 
+                    className={`mb-2 rounded-xl p-2 px-3 md:px-5 ${
+                        pathname === "/admin/question" ? "bg-custom-yellow" : ""
+                    }`}
+                >
+                    <a href="/admin/question" className="hover:text-gray-400 flex items-center gap-3">
                         <Image 
                             src="/icons/question.svg"
                             alt="dashboard"
