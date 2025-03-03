@@ -1,5 +1,6 @@
 "use client"
 import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 import {
     Accordion,
     AccordionContent,
@@ -43,13 +44,13 @@ const FAQPage = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl md:text-4xl font-bold mt-5">Часто задаваемые вопросы</h2>
 
-                    <Link href="#" className="hidden md:flex items-center gap-2 bg-custom-yellow rounded-xl p-2 px-4">
+                    <Link href="https://t.me/armykz_bot" target="_blank" className="hidden md:flex items-center gap-2 bg-custom-yellow rounded-xl p-2 px-4">
                         <Image
                             src="/icons/telegram-black.svg"
                             alt="telegram"
@@ -61,7 +62,7 @@ const FAQPage = () => {
                 </div>
 
                 {/* Accordion */}
-                <div className="flex flex-wrap md:flex-nowrap">
+                <div className="flex flex-wrap md:flex-nowrap flex-grow">
                     <form onSubmit={handleSearchSubmit} className="mt-5">
                         <input
                             type="text"
@@ -76,7 +77,7 @@ const FAQPage = () => {
                             }}
                             className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10 "
                         />
-                        <select
+                        {/* <select
                             name="education"
                             className="w-full mt-3 rounded-xl bg-[#F7F7F7] text-black p-3 appearance-none"
                             style={{
@@ -91,7 +92,7 @@ const FAQPage = () => {
                             </option>
                             <option value="option1">Связист</option>
                             <option value="option2">Срочная служба</option>
-                        </select>
+                        </select> */}
 
                         <button className="mt-6 font-medium w-full rounded-xl bg-custom-yellow py-3">Применить</button>
                     </form>
@@ -110,6 +111,7 @@ const FAQPage = () => {
 
                 <Link href="/faq/profiles" className="fixed right-20 bottom-10 animate-bounce text-center font-medium w-full max-w-[200px] rounded-xl bg-custom-yellow py-3">Задать вопрос</Link>
             </div>
+            <Footer />
         </>
     )
 }

@@ -1,12 +1,15 @@
+"use client"
+
 const Loader = () => {
     return (
-      <div className="fixed inset-0 flex justify-center items-center z-50">
-        <div className="relative w-24 h-24">
-          {/* Outer spinning circle */}
-          <div className="absolute inset-0 border-4 border-custom-yellow border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex justify-center items-center h-screen">
+            <div className="loader">
+                {/* You can customize this loader with CSS or use an animated spinner */}
+                <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-custom-yellow"></div>
+                <p className="mt-4 text-lg">Загрузка...</p>
+            </div>
         </div>
-      </div>
     );
-  };
-  
-  export default Loader;
+};
+
+export default Loader;

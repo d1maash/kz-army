@@ -258,14 +258,15 @@ const AdminApplication = () => {
                         ))}
                     </TableBody>
                 </Table>
-                <Pagination className="mt-5">
+                <Pagination className="mt-5 mb-5">
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious
-                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
-                                onClick={handlePrevious}
-                            // disabled={currentPage === 1} 
-                            />
+                            {currentPage > 1 && ( // Only show if not on the first page
+                                <PaginationPrevious
+                                    className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                    onClick={handlePrevious}
+                                />
+                            )}
                         </PaginationItem>
                         {[...Array(totalPages)].map((_, index) => (
                             <PaginationItem key={index}>
@@ -281,11 +282,12 @@ const AdminApplication = () => {
                             </PaginationItem>
                         ))}
                         <PaginationItem>
-                            <PaginationNext
-                                className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
-                                onClick={handleNext}
-                            // disabled={currentPage === totalPages} 
-                            />
+                            {currentPage < totalPages && ( // Only show if not on the last page
+                                <PaginationNext
+                                    className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
+                                    onClick={handleNext}
+                                />
+                            )}
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>

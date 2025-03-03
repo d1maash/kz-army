@@ -13,6 +13,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import Footer from "@/components/Footer"
 
 interface Article {
     id: number; // или number, в зависимости от вашего API
@@ -65,7 +66,7 @@ const Article = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <h2 className="text-3xl md:text-4xl font-bold mt-5">Полезные статьи и новости</h2>
@@ -113,6 +114,7 @@ const Article = () => {
                     </PaginationContent>
                 </Pagination>
             </div>
+            <Footer />
         </>
     )
 }

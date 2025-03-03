@@ -63,23 +63,22 @@ const AdminPage = () => {
     return (
         <div>
             <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
+                <div className="p-4 h-36 bg-white shadow-lg rounded-xl transform transition-transform hover:scale-105 hover:shadow-2xl hover:bg-custom-yellow">
                     <h2 className="font-bold text-5xl">{applications.count}</h2>
                     <p className="mt-2">Общее количество заявок</p>
                 </div>
-                <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
+                <div className="p-4 h-36 bg-white shadow-lg rounded-xl transform transition-transform hover:scale-105 hover:shadow-2xl hover:bg-custom-yellow">
                     <h2 className="font-bold text-5xl">{inReviewCount}</h2>
                     <p className="mt-2">Активные заявки</p>
                 </div>
-                <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
+                <div className="p-4 h-36 bg-white shadow-lg rounded-xl transform transition-transform hover:scale-105 hover:shadow-2xl hover:bg-custom-yellow">
                     <h2 className="font-bold text-5xl">{acceptedCount}</h2>
                     <p className="mt-2">Одобренные заявки</p>
                 </div>
-                <div className="p-4 h-36 bg-white shadow-lg rounded-xl">
+                <div className="p-4 h-36 bg-white shadow-lg rounded-xl transform transition-transform hover:scale-105 hover:shadow-2xl hover:bg-custom-yellow">
                     <h2 className="font-bold text-5xl">{rejectedCount}</h2>
                     <p className="mt-2">Отклонённые заявки</p>
                 </div>
-
             </div>
 
             <div className="flex justify-between flex-wrap md:flex-nowrap mt-6 gap-6">

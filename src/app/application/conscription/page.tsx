@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { api } from "@/utils/api"
 import { useState, useEffect } from "react"
+import Footer from "@/components/Footer"
 
 interface ProfileData {
     full_name: string
@@ -131,19 +132,24 @@ const Conscription = () => {
             )
 
             console.log("Успешная отправка:", response)
-            setSuccessPopup(true);
+            setSuccessPopup(true)
             setTimeout(() => {
-                setSuccessPopup(false);
-                window.location.reload();
-            }, 3000);
+                setSuccessPopup(false)
+                window.location.href = '/profile'
+            }, 3000)
 
         } catch (err: any) {
             console.error("Ошибка отправки:", err)
-
-            if (err.message.includes("401")) {
-                setError("Требуется авторизация")
-            } else if (err.message.includes("403")) {
-                setError("Пользователь не верифицирован")
+            if (err.message.includes("У вас уже есть активная заявка")) {
+                setError("Вы уже отправили заявку")
+                setTimeout(() => {
+                    window.location.href = '/profile'
+                }, 3000)
+            } else if (err.message.includes("401")) {
+                setError("Вы не авторизованы")
+                setTimeout(() => {
+                    window.location.href = '/login'
+                }, 3000)
             } else {
                 setError(err.message || "Ошибка отправки заявки")
             }
@@ -156,7 +162,7 @@ const Conscription = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
                 <div className="w-full p-10 lg:w-1/2 mx-auto flex flex-col items-center text-center">
                     <div className="w-full flex justify-between items-center">
                         <Link href="/application"><ChevronLeft /></Link>
@@ -175,7 +181,13 @@ const Conscription = () => {
                                 name="full_name"
                                 value={formData.full_name}
                                 onChange={handleInputChange}
-                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10"
+                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-3"
+                                style={{
+                                    backgroundImage: "url('/icons/new-user-icon.svg')",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "10px center",
+                                    backgroundSize: "20px 20px",
+                                }}
                                 required
                             />
 
@@ -196,7 +208,13 @@ const Conscription = () => {
                                 name="birth_date"
                                 value={formData.birth_date}
                                 onChange={handleInputChange}
-                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10"
+                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-3"
+                                style={{
+                                    backgroundImage: "url('/icons/new-date-icon.svg')",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "10px center",
+                                    backgroundSize: "20px 20px",
+                                }}
                                 required
                             />
 
@@ -293,6 +311,7 @@ const Conscription = () => {
                     </form>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

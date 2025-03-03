@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "@/utils/api";
 import Image from "next/image";
 
@@ -12,6 +12,14 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+
+    // Check if user is already logged in
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            router.push("/profile"); // Redirect to profile if already logged in
+        }
+    }, [router]);
 
     // Password toggle
     const togglePasswordVisibility = () => {
@@ -26,9 +34,17 @@ const Login = () => {
             const response = await api.login(username, password)
             localStorage.setItem('token', response.access)
             localStorage.setItem('user', JSON.stringify({ username }))
-            router.push('/profile') // Изменили редирект на профиль
+
+            // Check if the user is an admin
+            if (response.is_admin) {
+                // Redirect to the admin management page
+                router.push('/admin'); // Change this to the correct admin management page if different
+            } else {
+                // Redirect to the user's personal account page
+                router.push('/profile'); // Change this to the correct user profile page if different
+            }
         } catch (err) {
-            // const err = ...; // Удалите, если не используется
+            // Handle error
         }
     }
 
