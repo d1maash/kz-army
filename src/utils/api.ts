@@ -61,23 +61,25 @@ export const api = {
     },
     // Изменил на 'auth/me
     getProfile: async () => {
-        const token = localStorage.getItem('token')
-        if (!token) throw new Error('Требуется авторизация')
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Требуется авторизация');
+        }
 
         const response = await fetch(`${BASE_URL}/auth/me/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
-        })
+        });
 
         if (response.status === 401) {
-            localStorage.removeItem('token')
-            throw new Error('Сессия истекла')
+            localStorage.removeItem('token');
+            throw new Error('Сессия истекла');
         }
 
-        const data = await response.json()
-        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля')
-        return data
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки профиля');
+        return data;
     },
 
     updateProfile: async (userData: any) => {
@@ -241,13 +243,21 @@ export const api = {
 
 
     // Articles методы:
-    getArticles: async () => {
-        const response = await fetch(`${BASE_URL}/articles/`, {
+    getArticles: async (page?: number, category?: string, search?: string) => {
+        const params = new URLSearchParams();
+        if (page) params.append('page', page.toString());
+        if (category) params.append('category', category);
+        if (search) params.append('search', search);
+
+        const response = await fetch(`${BASE_URL}/articles/?${params.toString()}`, {
             method: 'GET',
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
+        if (!response.ok) {
+            console.error('Error fetching articles:', response.status, data);
+            throw new Error(data.detail || 'Ошибка загрузки статей');
+        }
         return data;
     },
 

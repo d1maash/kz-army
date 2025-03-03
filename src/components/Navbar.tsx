@@ -4,11 +4,13 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
+import { usePathname } from 'next/navigation'
 
 
 const Navbar = ({ isHome }: { isHome?: boolean }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [user, setUser] = useState<{ username: string } | null>(null)
+    const pathname = usePathname()
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -23,6 +25,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
         localStorage.removeItem('user')
         setUser(null)
         setIsMenuOpen(false)
+        window.location.href = '/auth/login'
     }
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
@@ -33,11 +36,11 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
 
             {/* Desktop Links */}
             <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
-                <Link href="/">О программе</Link>
-                <Link href="/application">Подача заявки</Link>
-                <Link href="/article">Статьи</Link>
-                <Link href="/faq">FAQ</Link>
-                <Link href="/faq/profiles">Профили</Link>
+                <Link href="/" className="relative hover-link">О программе</Link>
+                <Link href="/application" className="relative hover-link">Подача заявки</Link>
+                <Link href="/article" className="relative hover-link">Статьи</Link>
+                <Link href="/faq" className="relative hover-link">FAQ</Link>
+                <Link href="/faq/profiles" className="relative hover-link">Профили</Link>
             </div>
 
             {user ? (
@@ -102,6 +105,27 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .hover-link {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .hover-link::after {
+                    content: '';
+                    display: block;
+                    width: 0;
+                    height: 2px;
+                    background: yellow; /* Цвет линии */
+                    position: absolute;
+                    bottom: -5px; /* Расстояние от текста до линии */
+                    left: 0;
+                    transition: width 0.3s ease; /* Анимация */
+                }
+                .hover-link:hover::after {
+                    width: 100%; /* Линия растягивается при наведении */
+                }
+            `}</style>
         </nav>
     );
 };

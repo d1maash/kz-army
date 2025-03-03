@@ -20,17 +20,17 @@ const Footer = () => {
                     {/* Social */}
                     <ul className="flex flex-col gap-3">
                         <h3 className="font-bold">Наши соц-сети</h3>
-                        <Link href="" className="flex gap-1 items-center text-sm">
-                            <Image 
+                        <Link href="https://t.me/armykz_bot" className="flex gap-1 items-center text-sm">
+                            <Image
                                 src="/icons/telegram.svg"
                                 alt="telegram"
                                 width={20}
                                 height={20}
                             />
-                            @username
+                            @armykz_bot
                         </Link>
                         <Link href="" className="flex gap-1 items-center text-sm">
-                            <Image 
+                            <Image
                                 src="/icons/instagram.svg"
                                 alt="telegram"
                                 width={20}
@@ -42,7 +42,7 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-12 text-center text-white text-sm">
-                    Министерсrтво обороны Республики Казахстан
+                    Министерство обороны Республики Казахстан
                 </div>
             </div >
         </div >

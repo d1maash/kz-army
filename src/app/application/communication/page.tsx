@@ -5,6 +5,7 @@ import { ChevronLeft } from 'lucide-react';
 import Link from "next/link";
 import { api } from "@/utils/api";
 import { useState, useEffect } from "react";
+import Footer from "@/components/Footer";
 
 const Communication = () => {
     const [formData, setFormData] = useState({
@@ -89,11 +90,23 @@ const Communication = () => {
             setSuccessPopup(true);
             setTimeout(() => {
                 setSuccessPopup(false);
-                window.location.reload();
+                window.location.href = '/profile';
             }, 3000);
         } catch (err: any) {
             console.error("Ошибка отправки:", err.response?.data || err.message);
-            setError(err.response?.data?.detail || "Ошибка отправки");
+            if (err.message.includes("У вас уже есть активная заявка")) {
+                setError("Вы уже отправили заявку");
+                setTimeout(() => {
+                    window.location.href = '/profile';
+                }, 3000);
+            } else if (err.message.includes("401")) {
+                setError("Вы не авторизованы");
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 3000);
+            } else {
+                setError(err.response?.data?.detail || "Ошибка отправки");
+            }
         }
     };
 
@@ -101,8 +114,8 @@ const Communication = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28">
-                <div className="w-full  p-10 lg:w-1/2 mx-auto flex flex-col items-center text-center">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
+                <div className="w-full p-10 lg:w-1/2 mx-auto flex flex-col items-center text-center">
                     <div className="w-full flex justify-between items-center">
                         <Link href="/application"><ChevronLeft /></Link>
                         <h3 className="text-2xl font-bold">Форма для &quot;Связиста&quot;</h3>
@@ -121,13 +134,7 @@ const Communication = () => {
                                 name="fullName"
                                 value={formData.fullName}
                                 onChange={handleInputChange}
-                                style={{
-                                    backgroundImage: "url('/icons/user.svg')",
-                                    backgroundRepeat: "no-repeat",
-                                    backgroundPosition: "10px center",
-                                    backgroundSize: "20px 20px",
-                                }}
-                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10 "
+                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-3 "
                             />
                             {/* SElECT */}
                             <select
@@ -145,9 +152,9 @@ const Communication = () => {
                                 <option value="Образование">
                                     Образование
                                 </option>
-                                <option value="option1">Вариант 1</option>
-                                <option value="option2">Вариант 2</option>
-                                <option value="option3">Вариант 3</option>
+                                <option value="Школьное образование">Школьное образование</option>
+                                <option value="Среднее образование">Среднее образование</option>
+                                <option value="Высшее образование">Высшее образование</option>
                             </select>
                         </div>
 
@@ -160,12 +167,12 @@ const Communication = () => {
                                 value={formData.birthDate}
                                 onChange={handleInputChange}
                                 style={{
-                                    backgroundImage: "url('/icons/date.svg')",
+                                    backgroundImage: "url('/icons/new-date-icon.svg')",
                                     backgroundRepeat: "no-repeat",
                                     backgroundPosition: "10px center",
                                     backgroundSize: "20px 20px",
                                 }}
-                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10 appearance-none"
+                                className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-3 appearance-none"
                                 onFocus={(e) => (e.target.type = "date")} // Show date picker on focus
                                 onBlur={(e) => (e.target.type = "text")} // Show placeholder on blur
                                 required // Required for the :invalid selector to work
@@ -229,6 +236,7 @@ const Communication = () => {
                     )}
                 </div>
             </div>
+            <Footer />
         </>
     )
 }
