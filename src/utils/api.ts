@@ -241,6 +241,57 @@ export const api = {
         return true;
     },
 
+    // Админ Вопросы:
+    getQuestions: async (token: string, page: number, pageSize: number) => {
+        const response = await fetch(`${BASE_URL}/admin/questions/?page=${page}&page_size=${pageSize}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки вопросов');
+        return data;
+    },
+
+    answerQuestion: async (token: string, questionId: number, answer: string) => {
+        const response = await fetch(`${BASE_URL}/admin/questions/${questionId}/`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                answer: answer,
+                status: "answered" // Add if your API requires status change
+            })
+        });
+    
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка отправки ответа');
+        return data;
+    },
+
+    deleteQuestionById: async (id: number) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Требуется авторизация');
+
+        const response = await fetch(`${BASE_URL}/admin/questions/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete application");
+        }
+
+        return true;
+    },
+
 
     // Articles методы:
     getArticles: async (page?: number, category?: string, search?: string) => {
