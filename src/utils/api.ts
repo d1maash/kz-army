@@ -63,6 +63,10 @@ export const api = {
     getProfile: async () => {
         const token = localStorage.getItem('token');
         if (!token) {
+            // Убираем автоматическое перенаправление и очистку localStorage
+            // localStorage.removeItem('token');
+            // localStorage.removeItem('user');
+            // window.location.href = '/auth/login';
             throw new Error('Требуется авторизация');
         }
 
@@ -73,7 +77,10 @@ export const api = {
         });
 
         if (response.status === 401) {
-            localStorage.removeItem('token');
+            // Убираем автоматическое перенаправление и очистку localStorage
+            // localStorage.removeItem('token');
+            // localStorage.removeItem('user');
+            // window.location.href = '/auth/login';
             throw new Error('Сессия истекла');
         }
 
@@ -121,24 +128,27 @@ export const api = {
     },
     postFormData: async (endpoint: string, formData: FormData) => {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error('Требуется авторизация');
+        if (!token) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+            throw new Error('Требуется авторизация');
+        }
 
         try {
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    // Не устанавливаем Content-Type вручную!
                 },
                 body: formData,
             });
 
-            // Обработка 401
             if (response.status === 401) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 window.location.href = '/auth/login';
-                return;
+                throw new Error('Сессия истекла');
             }
 
             const data = await response.json();
@@ -267,7 +277,7 @@ export const api = {
                 status: "answered" // Add if your API requires status change
             })
         });
-    
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || 'Ошибка отправки ответа');
         return data;
@@ -316,13 +326,17 @@ export const api = {
     // Добавляем новый метод для создания заявки
     createCommunication: async (formData: FormData) => {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error('Требуется авторизация');
+        if (!token) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+            throw new Error('Требуется авторизация');
+        }
 
         const response = await fetch(`${BASE_URL}/applications/applications/communications/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                // Не устанавливаем Content-Type вручную!
             },
             body: formData,
         });
@@ -331,7 +345,7 @@ export const api = {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = '/auth/login';
-            return;
+            throw new Error('Сессия истекла');
         }
 
         const data = await response.json();
@@ -352,6 +366,35 @@ export const api = {
             }
 
             throw new Error(errorMessage);
+        }
+
+        return data;
+    },
+
+    // Получение статуса заявки пользователя
+    getUserApplicationStatus: async (applicationId: string) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Требуется авторизация');
+        }
+
+        const response = await fetch(`${BASE_URL}/applications/${applicationId}/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (response.status === 401) {
+            throw new Error('Сессия истекла');
+        }
+
+        if (response.status === 404) {
+            throw new Error('Заявка не найдена');
+        }
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.detail || 'Ошибка получения статуса заявки');
         }
 
         return data;

@@ -8,17 +8,7 @@ import Link from "next/link"
 import Footer from "@/components/Footer"
 
 const Application = () => {
-    const [showPopup, setShowPopup] = useState(false)
-
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        if (!token) {
-            setShowPopup(true)
-            setTimeout(() => {
-                window.location.href = '/auth/login'
-            }, 3000)
-        }
-    }, [])
+    // const [showPopup, setShowPopup] = useState(false)
 
     // const [selectedOption, setSelectedOption] = useState<string | null>(null)
     // const router = useRouter()
@@ -39,13 +29,13 @@ const Application = () => {
 
     return (
         <>
-            {showPopup && (
+            {/* {showPopup && (
                 <div className="popup fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-custom-yellow p-5 rounded shadow-lg">
                         <p>Вы не авторизованы. Пожалуйста, войдите в систему.</p>
                     </div>
                 </div>
-            )}
+            )} */}
             <Navbar />
             <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
                 <div className="w-full p-10 md:w-1/2 lg:w-2/5 mx-auto flex flex-col items-center text-center">

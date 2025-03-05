@@ -48,7 +48,7 @@ const Conscription = () => {
                 }))
             } catch (err) {
                 console.error("Ошибка загрузки профиля:", err)
-                setError("Необходимо авторизоваться")
+                setProfile(null)
             } finally {
                 setLoading(false)
             }
@@ -107,6 +107,14 @@ const Conscription = () => {
         e.preventDefault()
         setError("")
 
+        if (!localStorage.getItem('token')) {
+            setError("Вы не авторизованы")
+            setTimeout(() => {
+                window.location.href = '/auth/login'
+            }, 3000)
+            return
+        }
+
         if (formData.files.length === 0) {
             setError("Необходимо прикрепить хотя бы один файл")
             return
@@ -148,7 +156,7 @@ const Conscription = () => {
             } else if (err.message.includes("401")) {
                 setError("Вы не авторизованы")
                 setTimeout(() => {
-                    window.location.href = '/login'
+                    window.location.href = '/auth/login'
                 }, 3000)
             } else {
                 setError(err.message || "Ошибка отправки заявки")
@@ -157,7 +165,6 @@ const Conscription = () => {
     }
 
     if (loading) return <div>Загрузка...</div>
-    if (!profile) return <div>Необходимо авторизоваться</div>
 
     return (
         <>

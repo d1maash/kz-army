@@ -73,6 +73,15 @@ const Communication = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!localStorage.getItem('token')) {
+            setError("Вы не авторизованы");
+            setTimeout(() => {
+                window.location.href = '/auth/login';
+            }, 3000);
+            return;
+        }
+
         const formDataToSend = new FormData();
         formDataToSend.append("full_name", formData.fullName);
         formDataToSend.append("birth_date", formData.birthDate);
