@@ -1,15 +1,51 @@
+"use client"
+
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/Hero";
 import ImportantCard from "@/components/ImportantCard";
+import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
 import StepCard from "@/components/StepCard";
 import { importantCards } from "@/store/importantCards";
-import { serviceCards } from "@/store/serviceCards";
 import { stepCards } from "@/store/stepCards";
-// import Image from "next/image";
+import { api } from "@/utils/api";
+import { useEffect, useState } from "react";
+
+interface Article {
+    id: number;
+    title: string;
+    short_description: string;
+    content: string;
+    category: string;
+    published_date: string;
+    main_photo: string;
+}
 
 export default function Home() {
+    const [articles, setArticles] = useState<Article[]>([]) // Store all articles
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const data = await api.getArticles()
+                console.log(data)
+                setArticles(data.results) // Store the full list
+            } catch (error) {
+                const err = error as Error; // Приведение типа
+                setError(err.message || "Ошибка загрузки")
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchArticles()
+    }, [])
+
+    if (loading) return <Loader />
+
     return (
         <div>
             <Navbar isHome={true}></Navbar>
@@ -63,7 +99,8 @@ export default function Home() {
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
-                    {serviceCards.map((article) => (
+                    {error && <p>{error}</p>}
+                    {articles.slice(0, 4).map((article) => (
                         <ServiceCard
                             key={article.id}
                             article={article}

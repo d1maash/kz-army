@@ -51,7 +51,7 @@ const AdminAnswerCard = ({ id, name, profile, question, answer, status, onAnswer
             )}
 
             <div className="flex flex-col justify-center bg-[#F4F4F4] rounded-xl p-3">
-                <div className="flex w-full items-center justify-between ">
+                <div className="flex flex-wrap sm:flex-nowrap w-full items-center justify-between ">
                     <div className="flex items-center gap-3">
                         <Image
                             src="/Ivan.png"
@@ -71,7 +71,7 @@ const AdminAnswerCard = ({ id, name, profile, question, answer, status, onAnswer
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex mt-3 sm:mt-0 items-center gap-2">
                         <button 
                             className={`
                                 font-semibold rounded-xl p-3 px-4

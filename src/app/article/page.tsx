@@ -16,13 +16,13 @@ import {
 import Footer from "@/components/Footer"
 
 interface Article {
-    id: number; // или number, в зависимости от вашего API
-    // другие поля...
-}
-
-interface UserData {
-    full_name: string;
-    // другие поля...
+    id: number;
+    title: string;
+    short_description: string;
+    content: string;
+    category: string;
+    published_date: string;
+    main_photo: string;
 }
 
 const Article = () => {
@@ -31,12 +31,12 @@ const Article = () => {
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const articlesPerPage = 6 // Number of articles per page
-    const [userData, setUserData] = useState<UserData | null>(null);
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
                 const data = await api.getArticles()
+                console.log(data)
                 setArticles(data.results) // Store the full list
             } catch (error) {
                 const err = error as Error; // Приведение типа

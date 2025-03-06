@@ -1,5 +1,15 @@
 const BASE_URL = 'http://89.46.33.188/api';
 
+interface Article {
+    id: number;
+    title: string;
+    short_description: string;
+    content: string;
+    category: string;
+    published_date: string;
+    main_photo: string;
+}
+
 const request = async (endpoint: string, method = 'GET', body?: any, token?: string) => {
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
@@ -322,6 +332,78 @@ export const api = {
         return data;
     },
 
+    getArticleById: async (id: number): Promise<Article> => {
+        try {
+          const response = await fetch(`${BASE_URL}/articles/${id}/`, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+            },
+          });
+    
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+          }
+    
+          return await response.json() as Article;
+        } catch (error) {
+          if (error instanceof Error) {
+            throw new Error(`Failed to fetch article: ${error.message}`);
+          }
+          throw new Error('Unknown error occurred while fetching article');
+        }
+      },
+
+    // Profiles методы:
+    getProfiles: async () => {
+        const response = await fetch(`${BASE_URL}/profiles/`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            console.error('Error fetching Profiles:', data);
+            throw new Error(data.detail || 'Ошибка загрузки сотрудников');
+        }
+        return data;
+    },
+
+    getProfileById: async (id: number | string) => {
+        const response = await fetch(`${BASE_URL}/profiles/${id}/`, {
+          method: 'GET',
+        });
+    
+        const data = await response.json();
+        if (!response.ok) {
+          console.error('Error fetching Profile:', data);
+          throw new Error(data.detail || 'Ошибка загрузки профиля сотрудника');
+        }
+        return data;
+    },
+
+    // Вопросы для сотрудников
+    createQuestion: async (formData: FormData) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+            throw new Error('Требуется авторизация');
+        }
+        const response = await fetch(`${BASE_URL}/questions/questions/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        })
+
+        if (!response.ok) {
+            throw new Error("Error posting question")
+        }
+        return response.json()
+    },
 
     // Добавляем новый метод для создания заявки
     createCommunication: async (formData: FormData) => {

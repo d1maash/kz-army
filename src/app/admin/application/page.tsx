@@ -166,8 +166,8 @@ const AdminApplication = () => {
         </Button>
       </div>
 
-      <div className="w-full mt-6 text-center bg-white rounded-xl border-2 border-[#C8C8C8] overflow-x-auto">
-        <Table className="min-w-[600px]">
+      <div className="w-full mt-6 text-center bg-white rounded-xl border-2 border-[#C8C8C8] ">
+        <Table className="min-w-[600px] w-full overflow-x-visible">
           <TableHeader>
             <TableRow>
               <TableHead className="text-center">ID заявки</TableHead>

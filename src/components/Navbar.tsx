@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { usePathname } from 'next/navigation'
+import Profile from "./Profile"
 
 
 const Navbar = ({ isHome }: { isHome?: boolean }) => {
@@ -20,13 +21,13 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
         }
     }, [])
 
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        setUser(null)
-        setIsMenuOpen(false)
-        window.location.href = '/auth/login'
-    }
+    // const handleLogout = () => {
+    //     localStorage.removeItem('token')
+    //     localStorage.removeItem('user')
+    //     setUser(null)
+    //     setIsMenuOpen(false)
+    //     window.location.href = '/auth/login'
+    // }
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
@@ -35,35 +36,52 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
             <Link href="/" className={`font-bold text-lg ${isHome ? 'text-white' : 'text-black'}`}>ARMY.KZ</Link>
 
             {/* Desktop Links */}
-            <div className={`hidden md:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
-                <Link href="/" className="relative hover-link">О программе</Link>
-                <Link href="/application" className="relative hover-link">Подача заявки</Link>
-                <Link href="/article" className="relative hover-link">Статьи</Link>
-                <Link href="/faq" className="relative hover-link">FAQ</Link>
-                <Link href="/faq/profiles" className="relative hover-link">Профили</Link>
+            <div className={`hidden lg:flex gap-6 font-semibold ${isHome ? 'text-custom-yellow' : 'text-[#7D7D7D]'}`}>
+                <Link 
+                    href="/" 
+                    className={`relative hover-link ${pathname === '/' ? 'border-b-2 border-custom-yellow font-bold' : ''}`}
+                >
+                    О программе
+                </Link>
+                <Link 
+                    href="/application" 
+                    className={`relative hover-link ${pathname === '/application' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    Подача заявки
+                </Link>
+                <Link 
+                    href="/article" 
+                    className={`relative hover-link ${pathname === '/article' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    Статьи
+                </Link>
+                <Link 
+                    href="/faq" 
+                    className={`relative hover-link ${pathname === '/faq' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    FAQ
+                </Link>
+                <Link 
+                    href="/faq/profiles" 
+                    className={`relative hover-link ${pathname === '/faq/profiles' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    Профили
+                </Link>
             </div>
 
             {user ? (
-                <div className="hidden md:flex items-center gap-4">
-                    <a href="/profile" className={`${isHome ? `text-white bg-custom-yellow px-4 py-1 rounded-md` : 'text-white bg-black px-4 py-1 rounded-md'}`}>
-                        {user.username}
-                    </a>
-                    <button
-                        onClick={handleLogout}
-                        className="border border-custom-yellow px-4 py-1 rounded-md text-custom-yellow"
-                    >
-                        Выйти
-                    </button>
+                <div className="hidden lg:flex items-center gap-4">
+                    <Profile />
                 </div>
             ) : (
-                <div className="hidden md:flex gap-3">
+                <div className="hidden lg:flex gap-3">
                     <Link href="/auth/login" className="bg-custom-yellow text-black px-4 py-1 rounded-md">Войти</Link>
                     <Link href="/auth/register" className={`border border-custom-yellow px-4 py-1 rounded-md ${isHome ? 'text-custom-yellow' : 'text-black'}`}>Регистрация</Link>
                 </div>
             )}
 
             {/* Mobile Toggle Button */}
-            <button className="md:hidden text-custom-yellow" onClick={toggleMenu}>
+            <button className="lg:hidden text-custom-yellow" onClick={toggleMenu}>
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
@@ -96,12 +114,22 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                         Профили
                     </Link>
                     <div className="flex gap-3 mt-6">
-                        <Link href="/auth/login" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">
+                    {user ? (
+                        <div className="flex items-center gap-4">
+                            <Profile isLeft={true}/>
+                        </div>
+                    ) : (
+                        <div className="flex gap-3">
+                            <Link href="/auth/login" className="bg-custom-yellow text-black px-4 py-1 rounded-md">Войти</Link>
+                            <Link href="/auth/register" className={`border border-custom-yellow px-4 py-1 rounded-md text-custom-yellow`}>Регистрация</Link>
+                        </div>
+                    )}
+                        {/* <Link href="/auth/login" className="border border-custom-yellow text-custom-yellow px-4 py-1 rounded-md">
                             Войти
                         </Link>
                         <Link href="/auth/register" className="bg-custom-yellow text-black px-4 py-1 rounded-md">
                             Регистрация
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>

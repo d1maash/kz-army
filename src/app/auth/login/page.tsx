@@ -37,14 +37,13 @@ const Login = () => {
 
             // Check if the user is an admin
             if (response.is_admin) {
-                // Redirect to the admin management page
-                router.push('/admin'); // Change this to the correct admin management page if different
+                router.push('/admin'); 
             } else {
                 // Redirect to the user's personal account page
                 router.push('/profile'); // Change this to the correct user profile page if different
             }
         } catch (err) {
-            // Handle error
+            console.error(err)
         }
     }
 
