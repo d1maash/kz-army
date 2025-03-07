@@ -9,10 +9,9 @@ import Link from "next/link";
 interface UserData {
     first_name: string;
     last_name: string;
-    // другие поля...
 }
 
-const Profile = ({ isLeft }: {isLeft?: boolean}) => {
+const Profile = ({ isLeft, onLogout }: {isLeft?: boolean; onLogout: () => void}) => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const router = useRouter();
@@ -28,15 +27,17 @@ const Profile = ({ isLeft }: {isLeft?: boolean}) => {
                 setUserData(profile);
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
+                onLogout()
             }
         };
 
         fetchUserData();
-    }, [router]);
+    }, [router, onLogout]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("is_admin");
+        onLogout()
         router.push("/auth/login");
     };
 
@@ -50,8 +51,8 @@ const Profile = ({ isLeft }: {isLeft?: boolean}) => {
                     <p className="text-[#C8C8C8] text-end text-xs">{isAdmin && "Администратор"}</p>
                 </div>
                 <Image
-                    src="/Ivan.png"
-                    alt="ivan"
+                    src="/icons/anon-profile.svg"
+                    alt="User"
                     width={40}
                     height={40}
                 />

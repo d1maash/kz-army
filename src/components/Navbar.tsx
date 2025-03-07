@@ -14,22 +14,27 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
     const pathname = usePathname()
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
-        const storedUser = localStorage.getItem('user')
-        if (token && storedUser) {
-            setUser(JSON.parse(storedUser))
+        const checkAuth = () => {
+            const token = localStorage.getItem('token')
+            const storedUser = localStorage.getItem('user')
+            setUser(token && storedUser ? JSON.parse(storedUser) : null)
         }
+
+        checkAuth()
+        window.addEventListener('storage', checkAuth)
+        return () => window.removeEventListener('storage', checkAuth)
     }, [])
 
-    // const handleLogout = () => {
-    //     localStorage.removeItem('token')
-    //     localStorage.removeItem('user')
-    //     setUser(null)
-    //     setIsMenuOpen(false)
-    //     window.location.href = '/auth/login'
-    // }
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setUser(null)
+        setIsMenuOpen(false)
+        window.location.reload()
+    }
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
 
     return (
         <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-5 lg:px-20 xl:px-28 z-10">
@@ -71,7 +76,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
 
             {user ? (
                 <div className="hidden lg:flex items-center gap-4">
-                    <Profile />
+                    <Profile onLogout={handleLogout} />
                 </div>
             ) : (
                 <div className="hidden lg:flex gap-3">
@@ -116,7 +121,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     <div className="flex gap-3 mt-6">
                     {user ? (
                         <div className="flex items-center gap-4">
-                            <Profile isLeft={true}/>
+                            <Profile isLeft={true} onLogout={handleLogout}/>
                         </div>
                     ) : (
                         <div className="flex gap-3">

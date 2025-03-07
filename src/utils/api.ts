@@ -481,6 +481,24 @@ export const api = {
 
         return data;
     },
+
+    // Получение списка заявок пользователя
+    getUserApplications: async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Требуется авторизация');
+        }
+
+        const response = await fetch(`${BASE_URL}/auth/me/applications/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
+        return data;
+    },
 }
 
 
