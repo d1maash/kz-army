@@ -16,7 +16,7 @@ import {
 import Footer from "@/components/Footer"
 
 interface Article {
-    id: number;
+    id: number | string;
     title: string;
     short_description: string;
     content: string;

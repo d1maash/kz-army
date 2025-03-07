@@ -1,55 +1,83 @@
+"use client";
+
+import { use, useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { api } from "@/utils/api";
 import Image from "next/image";
-
-interface Params {
-    id: string;
-}
+import Loader from "@/components/Loader";
 
 interface Article {
-    id: number;
-    title: string;
-    content: string;
-    published_date: string;
-    main_photo: string;
+  id: number;
+  title: string;
+  short_description: string;
+  content: string;
+  category: string;
+  published_date: string;
+  main_photo: string;
 }
 
-export async function generateStaticParams() {
-    const articles = await api.getArticles();
-    return articles.results.map((article: Article) => ({
-        id: article.id.toString(),
-    }));
+interface ArticlePageProps {
+    params: Promise<{ id: string }>;
 }
 
-export default async function ArticlePage({ params }: { params: Params }) {
-    const article = await api.getArticleById(parseInt(params.id));
-    console.log(article)
+export default function ArticlePage({ params }: ArticlePageProps) {
+    const { id } = use(params)
+    const articleId = Number(id)
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    return (
-        <>
-            <Navbar />
-            <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28 flex flex-col">
-                {/* Line */}
-                <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
-                <h2 className="text-3xl md:text-4xl font-bold mt-5">{article.title}</h2>
-                <p className="text-[#7D7D7D] mt-3">Дата Публикации: {new Date(article.published_date).toLocaleDateString("ru-RU")}</p>
+  useEffect(() => {
+    if (isNaN(articleId)) {
+      setError("Invalid article ID");
+      setLoading(false);
+      return;
+    }
 
-                <Image
-                    src={article.main_photo}
-                    alt={article.title}
-                    width={500}
-                    height={300}
-                    className="object-cover mt-3 w-full max-h-[500px] rounded-xl"
-                />
+    const fetchArticle = async () => {
+      try {
+        const data = await api.getArticleById(articleId);
+        setArticle(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load article");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                <h3 className="text-lg font-bold mt-6">{article.title}</h3>
-                <p className="mt-3">{article.short_description}</p>
+    fetchArticle();
+  }, [articleId]);
 
-                {/* Main content */}
-                <p className="mt-6">{article.content}</p>
-            </div>
-            <Footer />
-        </>
-    );
+  if (loading) return <Loader />;
+  if (error) return <div>Error: {error}</div>;
+  if (!article) return <div>Article not found</div>;
+
+  return (
+    <>
+      <Navbar />
+      <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28 flex flex-col">
+        <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
+        <h2 className="text-3xl md:text-4xl font-bold mt-5">{article.title}</h2>
+        <p className="text-[#7D7D7D] mt-3">
+          Дата Публикации: {new Date(article.published_date).toLocaleDateString("ru-RU")}
+        </p>
+
+        <Image
+          src={article.main_photo}
+          alt={article.title}
+          width={1200}
+          height={630}
+          className="object-cover mt-3 w-full h-auto aspect-video rounded-xl"
+          priority
+        />
+
+        <div className="prose max-w-none mt-8">
+          <p className="text-lg font-semibold mt-6">{article.short_description}</p>
+          <div dangerouslySetInnerHTML={{ __html: article.content }} />
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 }

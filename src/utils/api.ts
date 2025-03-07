@@ -1,14 +1,14 @@
 const BASE_URL = 'http://89.46.33.188/api';
 
-interface Article {
-    id: number;
-    title: string;
-    short_description: string;
-    content: string;
-    category: string;
-    published_date: string;
-    main_photo: string;
-}
+// interface Article {
+//     id: number;
+//     title: string;
+//     short_description: string;
+//     content: string;
+//     category: string;
+//     published_date: string;
+//     main_photo: string;
+// }
 
 const request = async (endpoint: string, method = 'GET', body?: any, token?: string) => {
     const headers: HeadersInit = {
@@ -314,16 +314,15 @@ export const api = {
 
 
     // Articles методы:
-    getArticles: async (page?: number, category?: string, search?: string) => {
+    getArticles: async (page?: number, category?: string) => {
         const params = new URLSearchParams();
         if (page) params.append('page', page.toString());
         if (category) params.append('category', category);
-        if (search) params.append('search', search);
-
+    
         const response = await fetch(`${BASE_URL}/articles/?${params.toString()}`, {
             method: 'GET',
         });
-
+    
         const data = await response.json();
         if (!response.ok) {
             console.error('Error fetching articles:', response.status, data);
@@ -332,7 +331,7 @@ export const api = {
         return data;
     },
 
-    getArticleById: async (id: number): Promise<Article> => {
+    getArticleById: async (id: number) => {
         try {
           const response = await fetch(`${BASE_URL}/articles/${id}/`, {
             method: 'GET',
@@ -340,13 +339,8 @@ export const api = {
               'Accept': 'application/json',
             },
           });
-    
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-          }
-    
-          return await response.json() as Article;
+
+          return await response.json();
         } catch (error) {
           if (error instanceof Error) {
             throw new Error(`Failed to fetch article: ${error.message}`);

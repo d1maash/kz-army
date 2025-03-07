@@ -47,12 +47,18 @@ export default function AdminLayout({
         return <Loader />;
     }
 
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.reload()
+    }
+
 
     return (
         <div className="flex min-h-screen">
 
             {/* Profile */}
-            <Profile />
+            <Profile onLogout={handleLogout} />
 
 
             {/* Sidebar */}

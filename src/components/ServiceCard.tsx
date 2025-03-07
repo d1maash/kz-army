@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link";
 
 interface Article {
-    id: number;
+    id: number | string;
     title: string;
     short_description: string;
     content: string;
@@ -13,7 +13,7 @@ interface Article {
 
 const ServiceCard = ({ article }: { article: Article }) => {
     return (
-        <Link href={`/article/${article.id}`} className="transition duration-300 ease-in-out hover:bg-custom-yellow flex flex-col rounded-xl overflow-hidden bg-[#F1EFEF]">
+        <Link href={`/article/${article.id.toString()}`} className="transition duration-300 ease-in-out hover:bg-custom-yellow flex flex-col rounded-xl overflow-hidden bg-[#F1EFEF]">
             <Image
                 src={article.main_photo || "/services/service-1.png"}
                 alt={article.title}
