@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, Check } from "lucide-react";
 import { api } from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 interface FaqProfileModalProps {
   profileId: number; // ID of the employee profile to which the question is addressed
@@ -13,6 +14,7 @@ interface FaqProfileModalProps {
 const FaqProfileModal = ({ profileId, name, close }: FaqProfileModalProps) => {
   const [questionText, setQuestionText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ const FaqProfileModal = ({ profileId, name, close }: FaqProfileModalProps) => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("User is not authenticated");
+      router.push('/auth/login/')
       return;
     }
 

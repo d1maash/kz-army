@@ -12,8 +12,9 @@ import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Navbar from "@/components/Navbar"
 import Image from "next/image"
-import { EllipsisVertical } from 'lucide-react';
+// import { EllipsisVertical } from 'lucide-react';
 import Loader from "@/components/Loader"
+import StatusCard from "@/components/StatusCard";
 
 interface UserData {
     full_name?: string;
@@ -28,9 +29,20 @@ interface UserData {
     status?: string;
 }
 
+interface ApplicationStatus {
+    application_type?: string;
+    application_type_display?: string;
+    comment?: string;
+    id?: number;
+    status?: string;
+    status_display?: string;
+    submitted_at?: string;
+}
+
 const ProfilePage = () => {
     const router = useRouter()
-    const [userData, setUserData] = useState<UserData | null>(null)
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const [applicationStatus, setApplicationStatus] = useState<ApplicationStatus[]>([])
     const [isEditing, setIsEditing] = useState(false)
     const [editedData, setEditedData] = useState<UserData>({} as UserData)
     const [errorMessage, setErrorMessage] = useState('')
@@ -62,6 +74,19 @@ const ProfilePage = () => {
                 });
         }
     }, [router])
+
+    useEffect(() => {
+        const fetchApplicationStatus = async () => {
+            try {
+                const applications = await api.getUserApplications();
+                setApplicationStatus(applications as ApplicationStatus[])   
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        fetchApplicationStatus()
+    }, [])
+    console.log(applicationStatus)
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -137,7 +162,7 @@ const ProfilePage = () => {
                 <div className="mt-3 flex flex-col md:flex-row items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Image
-                            src={userData.avatar || "/Ivan.png"}
+                            src={userData.avatar || "/icons/anon-profile.svg"}
                             alt="Avatar"
                             width={50}
                             height={50}
@@ -278,7 +303,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Button to submit application */}
-                <div className="flex justify-start mt-4">
+                <div className="flex justify-start mt-6">
                     <button
                         onClick={() => router.push('/application')}
                         className="font-medium w-full max-w-[200px] rounded-xl bg-custom-yellow py-3"
@@ -286,6 +311,21 @@ const ProfilePage = () => {
                         Подать заявку
                     </button>
                 </div>
+
+                {/* Статус для заявок */}
+                <h2 className="mt-6 font-bold text-2xl text-center md:text-left">Статус заявок</h2>
+                <div className="mt-3 flex flex-wrap items-center gap-6">
+                    {applicationStatus.map((status: ApplicationStatus) => (
+                        <StatusCard 
+                            key={status.id}
+                            application_type_display={status.application_type_display}
+                            status={status.status}
+                            status_display={status.status_display}
+                            submitted_at={status.submitted_at}
+                        />
+                    ))}
+                </div>
+                
             </div>
         </>
     )

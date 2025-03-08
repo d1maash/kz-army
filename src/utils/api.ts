@@ -1,14 +1,14 @@
 const BASE_URL = 'http://89.46.33.188/api';
 
-interface Article {
-    id: number;
-    title: string;
-    short_description: string;
-    content: string;
-    category: string;
-    published_date: string;
-    main_photo: string;
-}
+// interface Article {
+//     id: number;
+//     title: string;
+//     short_description: string;
+//     content: string;
+//     category: string;
+//     published_date: string;
+//     main_photo: string;
+// }
 
 const request = async (endpoint: string, method = 'GET', body?: any, token?: string) => {
     const headers: HeadersInit = {
@@ -314,11 +314,10 @@ export const api = {
 
 
     // Articles методы:
-    getArticles: async (page?: number, category?: string, search?: string) => {
+    getArticles: async (page?: number, category?: string) => {
         const params = new URLSearchParams();
         if (page) params.append('page', page.toString());
         if (category) params.append('category', category);
-        if (search) params.append('search', search);
 
         const response = await fetch(`${BASE_URL}/articles/?${params.toString()}`, {
             method: 'GET',
@@ -332,7 +331,7 @@ export const api = {
         return data;
     },
 
-    getArticleById: async (id: number): Promise<Article> => {
+    getArticleById: async (id: number) => {
         try {
             const response = await fetch(`${BASE_URL}/articles/${id}/`, {
                 method: 'GET',
@@ -341,12 +340,7 @@ export const api = {
                 },
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-            }
-
-            return await response.json() as Article;
+            return await response.json();
         } catch (error) {
             if (error instanceof Error) {
                 throw new Error(`Failed to fetch article: ${error.message}`);
@@ -479,6 +473,24 @@ export const api = {
             throw new Error(data.detail || 'Ошибка получения статуса заявки');
         }
 
+        return data;
+    },
+
+    // Получение списка заявок пользователя
+    getUserApplications: async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Требуется авторизация');
+        }
+
+        const response = await fetch(`${BASE_URL}/auth/me/applications/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');
         return data;
     },
 }

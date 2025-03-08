@@ -39,7 +39,7 @@ const FaqProfileCard: React.FC<FaqProfileCardProps> = ({ id, name, role, image, 
         </Link>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-full font-medium mt-5 py-3 rounded-xl border-2 border-custom-yellow bg-none group-hover:bg-white group-hover:text-custom-yellow transition-colors duration-200"
+          className="w-full font-medium mt-5 py-3 rounded-xl border-2 border-custom-yellow bg-none group-hover:bg-black group-hover:text-custom-yellow transition-colors duration-200"
         >
           Задать вопрос
         </button>
