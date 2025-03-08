@@ -334,26 +334,26 @@ export const api = {
 
     getArticleById: async (id: number): Promise<Article> => {
         try {
-          const response = await fetch(`${BASE_URL}/articles/${id}/`, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-            },
-          });
-    
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-          }
-    
-          return await response.json() as Article;
+            const response = await fetch(`${BASE_URL}/articles/${id}/`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json() as Article;
         } catch (error) {
-          if (error instanceof Error) {
-            throw new Error(`Failed to fetch article: ${error.message}`);
-          }
-          throw new Error('Unknown error occurred while fetching article');
+            if (error instanceof Error) {
+                throw new Error(`Failed to fetch article: ${error.message}`);
+            }
+            throw new Error('Unknown error occurred while fetching article');
         }
-      },
+    },
 
     // Profiles методы:
     getProfiles: async () => {
@@ -371,13 +371,13 @@ export const api = {
 
     getProfileById: async (id: number | string) => {
         const response = await fetch(`${BASE_URL}/profiles/${id}/`, {
-          method: 'GET',
+            method: 'GET',
         });
-    
+
         const data = await response.json();
         if (!response.ok) {
-          console.error('Error fetching Profile:', data);
-          throw new Error(data.detail || 'Ошибка загрузки профиля сотрудника');
+            console.error('Error fetching Profile:', data);
+            throw new Error(data.detail || 'Ошибка загрузки профиля сотрудника');
         }
         return data;
     },
