@@ -314,21 +314,24 @@ export const api = {
 
 
     // Articles методы:
-    getArticles: async (page?: number, category?: string) => {
-        const params = new URLSearchParams();
-        if (page) params.append('page', page.toString());
-        if (category) params.append('category', category);
-
-        const response = await fetch(`${BASE_URL}/articles/?${params.toString()}`, {
-            method: 'GET',
-        });
-
-        const data = await response.json();
-        if (!response.ok) {
-            console.error('Error fetching articles:', response.status, data);
-            throw new Error(data.detail || 'Ошибка загрузки статей');
+    getArticles: async (page: number = 1, pageSize: number = 6) => {
+        try {
+            const response = await fetch(
+                `${BASE_URL}/articles/?page=${page}&page_size=${pageSize}`, 
+                { method: 'GET' }
+            );
+            
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки статей');
+            
+            return {
+                results: data.results,
+                count: data.count // Total number of items
+            };
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+            throw error;
         }
-        return data;
     },
 
     getArticleById: async (id: number) => {

@@ -31,7 +31,7 @@ export default function Home() {
         const fetchArticles = async () => {
             try {
                 const data = await api.getArticles()
-                console.log(data)
+                // console.log(data)
                 setArticles(data.results) // Store the full list
             } catch (error) {
                 const err = error as Error; // Приведение типа

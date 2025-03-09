@@ -86,7 +86,7 @@ const ProfilePage = () => {
         }
         fetchApplicationStatus()
     }, [])
-    console.log(applicationStatus)
+    // console.log(applicationStatus)
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;

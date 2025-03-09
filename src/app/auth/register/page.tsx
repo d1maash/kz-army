@@ -6,6 +6,8 @@ import Link from "next/link"
 import { useState } from "react"
 import { api } from "@/utils/api"
 import { useRouter } from "next/navigation"
+import Footer from "@/components/Footer"
+import "../auth.css"
 
 const Register = () => {
     const router = useRouter()
@@ -152,6 +154,7 @@ const Register = () => {
                     </div>
                 </div>
             )}
+            <Footer />
         </>
     )
 }

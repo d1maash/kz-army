@@ -47,7 +47,7 @@ const Profile = ({ isLeft, onLogout }: {isLeft?: boolean; onLogout: () => void})
         <div className={`absolute top-5 ${isLeft ? "left-5" : "right-5"}`}>
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <div className="flex flex-col">
-                    <h3 className="font-bold">{userData?.first_name + userData?.last_name || "Пользователь"}</h3>
+                    <h3 className="font-bold">{userData?.first_name + " " + userData?.last_name || "Пользователь"}</h3>
                     <p className="text-[#C8C8C8] text-end text-xs">{isAdmin && "Администратор"}</p>
                 </div>
                 <Image

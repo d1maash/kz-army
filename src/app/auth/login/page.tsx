@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { api } from "@/utils/api";
 import Image from "next/image";
+import Footer from "@/components/Footer";
+import "../auth.css"
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -108,6 +110,7 @@ const Login = () => {
                     <p className="mt-3 text-sm font-normal">У вас еще нет аккаунта? <span className="text-[#0084FF]"><Link href={`/auth/register`}>Зарегистрироваться</Link></span></p>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

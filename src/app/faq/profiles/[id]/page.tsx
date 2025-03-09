@@ -15,6 +15,8 @@ interface ProfileType {
   department: string;
   contacts: string;
   biography: string;
+  birth_date: string;
+  education: string;
 }
 
 interface ProfilePageProps {
@@ -61,8 +63,8 @@ export default function ProfilePage({ params }: ProfilePageProps) {
           <div className="flex flex-wrap w-full items-start justify-between">
             <div className="flex flex-col justify-center">
               <h3 className="font-bold text-2xl">{profile.name}</h3>
-              <p>{profile.position}</p>
-              <p>{profile.department}</p>
+              <p>{profile.position || "Не указано"}</p>
+              <p>{profile.department || "Не указано"}</p>
             </div>
 
             <button
@@ -78,26 +80,26 @@ export default function ProfilePage({ params }: ProfilePageProps) {
           <div className="flex flex-col">
             <p>Дата рождение</p>
             <p>
-              <strong>04.03.1966</strong>
+              <strong>{profile.birth_date || "Не указано"}</strong>
             </p>
           </div>
           <div className="flex flex-col">
             <p>Контактные данные</p>
             <p>
-              <strong>{profile.contacts}</strong>
+              <strong>{profile.contacts || "Не указано"}</strong>
             </p>
           </div>
           <div className="flex flex-col">
             <p>Образование</p>
             <p>
-              <strong>Военный институт сухопутных войск</strong>
+              <strong>{profile.education || "Не указано"}</strong>
             </p>
           </div>
         </div>
 
         <div className="mt-3 flex flex-col border-2 rounded-xl p-4">
           <h3 className="font-bold text-xl">Биография</h3>
-          <p className="mt-3">{profile.biography}</p>
+          <p className="mt-3">{profile.biography || "Не указано"}</p>
         </div>
       </div>
 

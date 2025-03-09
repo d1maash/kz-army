@@ -14,6 +14,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import Footer from "@/components/Footer"
+import { useSearchParams, useRouter } from "next/navigation"
 
 interface Article {
     id: number | string;
@@ -26,20 +27,31 @@ interface Article {
 }
 
 const Article = () => {
-    const [articles, setArticles] = useState<Article[]>([]) // Store all articles
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const [articles, setArticles] = useState<Article[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState<number>(1)
-    const articlesPerPage = 6 // Number of articles per page
+    const [totalPages, setTotalPages] = useState<number>(1)
+    
+    const page = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 6
+    const currentPage = Math.max(1, isNaN(page) ? 1 : page)
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const data = await api.getArticles()
-                console.log(data)
-                setArticles(data.results) // Store the full list
+                const data = await api.getArticles(currentPage, pageSize)
+                setArticles(data.results)
+                setTotalPages(Math.ceil(data.count / pageSize))
+                
+                // Update URL without refreshing
+                const params = new URLSearchParams(searchParams)
+                params.set('page', currentPage.toString())
+                router.replace(`?${params.toString()}`, { scroll: false })
+                
             } catch (error) {
-                const err = error as Error; // Приведение типа
+                const err = error as Error
                 setError(err.message || "Ошибка загрузки")
             } finally {
                 setLoading(false)
@@ -47,19 +59,18 @@ const Article = () => {
         }
 
         fetchArticles()
-    }, [])
+    }, [currentPage])
 
-    // Calculate pagination
-    const totalPages = Math.ceil(articles.length / articlesPerPage)
-    const paginatedArticles = articles.slice((currentPage - 1) * articlesPerPage, currentPage * articlesPerPage)
-
-    const handlePrevious = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1)
+    const handlePageChange = (newPage: number) => {
+        const validPage = Math.max(1, Math.min(newPage, totalPages))
+        if (validPage !== currentPage) {
+            setLoading(true)
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
     }
 
-    const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1)
-    }
+    const handlePrevious = () => handlePageChange(currentPage - 1)
+    const handleNext = () => handlePageChange(currentPage + 1)
 
     if (loading) return <Loader />
 
@@ -76,7 +87,7 @@ const Article = () => {
 
                 <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                     {error && <p>{error}</p>}
-                    {paginatedArticles.map((article: Article) => (
+                    {articles.map((article: Article) => (
                         <ServiceCard key={article.id} article={article} />
                     ))}
                 </div>
@@ -88,7 +99,7 @@ const Article = () => {
                             <PaginationPrevious
                                 className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
                                 onClick={handlePrevious}
-                            // disabled={currentPage === 1}
+                                // disabled={currentPage === 1}
                             />
                         </PaginationItem>
                         {[...Array(totalPages)].map((_, index) => (
@@ -98,7 +109,7 @@ const Article = () => {
                                         ? "border-custom-yellow text-custom-yellow"
                                         : "border-[#E8E7DF] hover:border-custom-yellow"
                                         }`}
-                                    onClick={() => setCurrentPage(index + 1)}
+                                    onClick={() => handlePageChange(index + 1)}
                                 >
                                     {index + 1}
                                 </PaginationLink>
@@ -108,7 +119,7 @@ const Article = () => {
                             <PaginationNext
                                 className="border-2 border-[#E8E7DF] hover:border-custom-yellow"
                                 onClick={handleNext}
-                            // disabled={currentPage === totalPages}
+                                // disabled={currentPage === totalPages}
                             />
                         </PaginationItem>
                     </PaginationContent>

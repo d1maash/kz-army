@@ -44,7 +44,7 @@ const FAQPage = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-screen">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-[50vh] ">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <div className="flex items-center justify-between">
@@ -77,22 +77,6 @@ const FAQPage = () => {
                             }}
                             className="w-full rounded-xl bg-[#F7F7F7] text-[#858585] p-3 pl-10 "
                         />
-                        {/* <select
-                            name="education"
-                            className="w-full mt-3 rounded-xl bg-[#F7F7F7] text-black p-3 appearance-none"
-                            style={{
-                                backgroundImage: "url('/icons/down-arrow.svg')", // Add a custom dropdown arrow
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "right 15px center",
-                                backgroundSize: "10px 10px",
-                            }}
-                        >
-                            <option value="">
-                                Направление
-                            </option>
-                            <option value="option1">Связист</option>
-                            <option value="option2">Срочная служба</option>
-                        </select> */}
 
                         <button className="mt-6 font-medium w-full rounded-xl bg-custom-yellow py-3">Применить</button>
                     </form>
