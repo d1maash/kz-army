@@ -15,6 +15,7 @@ import Image from "next/image"
 // import { EllipsisVertical } from 'lucide-react';
 import Loader from "@/components/Loader"
 import StatusCard from "@/components/StatusCard";
+import Footer from "@/components/Footer";
 
 interface UserData {
     full_name?: string;
@@ -327,6 +328,7 @@ const ProfilePage = () => {
                 </div>
                 
             </div>
+            <Footer />
         </>
     )
 }
