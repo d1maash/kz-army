@@ -1,13 +1,19 @@
 "use client"
 
+import CourseCard from "@/components/CourseCard";
+import CourseModal from "@/components/CourseModal";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/Hero";
 import ImportantCard from "@/components/ImportantCard";
 import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
+import ServiceFieldCard from "@/components/ServiceFieldCard";
+import ServiceFieldModal from "@/components/ServiceFieldModal";
 import StepCard from "@/components/StepCard";
+import { courseCards } from "@/store/courseCards";
 import { importantCards } from "@/store/importantCards";
+import { serviceFieldCards } from "@/store/serviceFieldCards";
 import { stepCards } from "@/store/stepCards";
 import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
@@ -26,6 +32,8 @@ export default function Home() {
     const [articles, setArticles] = useState<Article[]>([]) // Store all articles
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+    const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
+    const [selectedServiceField, setSelectedServiceField] = useState<number | null>(null)
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -50,6 +58,39 @@ export default function Home() {
         <div>
             <Navbar isHome={true}></Navbar>
             <HeroSection></HeroSection>
+
+            {/* Служба */}
+            <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
+                {/* Line */}
+                <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
+                <h2 className="text-4xl md:text-5xl font-bold mt-5">Служба в 78460 военном участке</h2>
+                <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Присоединяйтесь к 78460 военной участке и получите не только бесценный военный опыт, но и востребованные навыки, которые пригодятся вам в жизни и карьере.</p>
+            
+                {/* Service Cards */}
+                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">
+                    {serviceFieldCards.map((card) => (
+                        <ServiceFieldCard 
+                            key={card.id} 
+                            card={card} 
+                            onClick={() => setSelectedServiceField(card.id)}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Курсы для военнослужащих */}
+            <div className="container mx-auto md:px-20 mt-20 md:mt-28">
+                <h2 className="text-4xl md:text-5xl text-center font-bold mt-5">Курсы для военнослужащих</h2>
+                <div className="mt-10 mx-5 md:mx-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">
+                    {courseCards.map((card) => (
+                        <CourseCard 
+                            key={card.id} 
+                            card={card} 
+                            onClick={() => setSelectedCourse(card.id)}
+                        />
+                    ))}
+                </div>
+            </div>
 
             {/* Почему это важно ? */}
             <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
@@ -111,6 +152,20 @@ export default function Home() {
 
             {/* Footer */}
             <Footer />
+
+            {selectedCourse && (
+                <CourseModal 
+                    card={courseCards.find(c => c.id === selectedCourse)}
+                    onClose={() => setSelectedCourse(null)}
+                />
+            )}
+
+            {selectedServiceField && (
+                <ServiceFieldModal 
+                    card={serviceFieldCards.find(c => c.id === selectedServiceField)}
+                    onClose={() => setSelectedServiceField(null)}
+                />
+            )}
         </div>
     );
 }
