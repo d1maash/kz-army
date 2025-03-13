@@ -155,14 +155,14 @@ export default function Home() {
 
             {selectedCourse && (
                 <CourseModal 
-                    card={courseCards.find(c => c.id === selectedCourse)}
+                    card={courseCards.find(c => c.id === selectedCourse)!}
                     onClose={() => setSelectedCourse(null)}
                 />
             )}
 
             {selectedServiceField && (
                 <ServiceFieldModal 
-                    card={serviceFieldCards.find(c => c.id === selectedServiceField)}
+                    card={serviceFieldCards.find(c => c.id === selectedServiceField)!}
                     onClose={() => setSelectedServiceField(null)}
                 />
             )}
