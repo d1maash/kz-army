@@ -42,9 +42,9 @@ const FAQPage = () => {
     ].filter(item => item.question.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
-        <>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
-            <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-[50vh] ">
+            <div className="container mx-auto px-5 mt-20 md:mt-28 flex-grow">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <div className="flex items-center justify-between">
@@ -96,7 +96,7 @@ const FAQPage = () => {
                 <Link href="/faq/profiles" className="fixed right-20 bottom-10 animate-bounce text-center font-medium w-full max-w-[200px] rounded-xl bg-custom-yellow py-3">Задать вопрос</Link>
             </div>
             <Footer />
-        </>
+        </div>
     )
 }
 
