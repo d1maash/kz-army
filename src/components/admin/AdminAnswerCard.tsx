@@ -5,10 +5,12 @@ import Image from "next/image"
 import { useState } from "react"
 import { Trash2, MoreVertical, Eye } from "lucide-react"
 import { api } from "@/utils/api"
+import toast from "react-hot-toast"
 
 interface AdminAnswerType {
     id: number
     name: string;
+    user_name: string;
     profile: string;
     question: string;
     answer: string;
@@ -18,7 +20,7 @@ interface AdminAnswerType {
     toggleAnswer: (id: number) => void;
 }
 
-const AdminAnswerCard = ({ id, name, profile, question, answer, status, onAnswer, activeAnswerId, toggleAnswer }: AdminAnswerType) => {
+const AdminAnswerCard = ({ id, name, user_name, profile, question, answer, status, onAnswer, activeAnswerId, toggleAnswer }: AdminAnswerType) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const isAnswerOpen = activeAnswerId === id
@@ -32,8 +34,10 @@ const AdminAnswerCard = ({ id, name, profile, question, answer, status, onAnswer
                 await api.deleteQuestionById(id)
                 onAnswer()
             }
+            toast.success("Вопрос успешно удален")
         } catch (error) {
             console.error("Ошибка при удалении вопроса:", error)
+            toast.error("Ошибка при удалении вопроса")
         }
     }
 
@@ -63,7 +67,7 @@ const AdminAnswerCard = ({ id, name, profile, question, answer, status, onAnswer
 
                         <div className="flex flex-col">
                             <div className="font-bold">
-                                {name} ● <span className="text-[#7D7D7D]">Вопрос для {profile}</span>
+                                {name || user_name} ● <span className="text-[#7D7D7D]">Вопрос для {profile}</span>
                             </div>
                             <div className="text-xs">
                                 {question}

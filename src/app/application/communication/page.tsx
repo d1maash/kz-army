@@ -73,51 +73,57 @@ const Communication = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!localStorage.getItem('token')) {
-            setError("Вы не авторизованы");
-            setTimeout(() => {
-                window.location.href = '/auth/login';
-            }, 3000);
-            return;
-        }
-
-        const formDataToSend = new FormData();
-        formDataToSend.append("full_name", formData.fullName);
-        formDataToSend.append("birth_date", formData.birthDate);
-        formDataToSend.append("email", formData.email);
-        formDataToSend.append("phone", formData.phone);
-        formDataToSend.append("address", formData.address);
-        formDataToSend.append("comment", formData.comment);
-        formDataToSend.append("education", formData.education);
-        formDataToSend.append("communications_experience", formData.experience);
-        files.forEach(file => formDataToSend.append("files", file));
-
+      
         try {
-            const response = await api.createCommunication(formDataToSend);
-            console.log("Успешная отправка:", response);
-            setSuccessPopup(true);
-            setTimeout(() => {
-                setSuccessPopup(false);
-                window.location.href = '/profile';
-            }, 3000);
-        } catch (err: any) {
-            console.error("Ошибка отправки:", err.response?.data || err.message);
-            if (err.message.includes("У вас уже есть активная заявка")) {
-                setError("Вы уже отправили заявку");
-                setTimeout(() => {
-                    window.location.href = '/profile';
-                }, 3000);
-            } else if (err.message.includes("401")) {
-                setError("Вы не авторизованы");
-                setTimeout(() => {
-                    window.location.href = '/login';
-                }, 3000);
-            } else {
-                setError(err.response?.data?.detail || "Ошибка отправки");
+          if (!localStorage.getItem('token')) {
+            throw new Error('Требуется авторизация');
+          }
+      
+          const formDataToSend = new FormData();
+          // ... populate form data ...
+          formDataToSend.append("full_name", formData.fullName);
+          formDataToSend.append("birth_date", formData.birthDate);
+          formDataToSend.append("email", formData.email);
+          formDataToSend.append("phone", formData.phone);
+          formDataToSend.append("address", formData.address);
+          formDataToSend.append("comment", formData.comment);
+          formDataToSend.append("education", formData.education);
+          formDataToSend.append("communications_experience", formData.experience);
+          files.forEach(file => formDataToSend.append("files", file));
+      
+          const response = await api.createCommunication(formDataToSend);
+          console.log("Успешная отправка:", response);
+          setSuccessPopup(true);
+          setTimeout(() => {
+            setSuccessPopup(false);
+            window.location.href = '/profile';
+          }, 3000);
+        } catch (error) {
+            let errorMessage = "Произошла неизвестная ошибка";
+            
+            if (error instanceof Error) {
+              errorMessage = error.message;
+            } else if (typeof error === "string") {
+              errorMessage = error;
             }
-        }
-    };
+          
+            if (errorMessage === 'Сессия истекла') {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              setError("Сессия истекла, войдите снова");
+              setTimeout(() => {
+                window.location.href = '/auth/login';
+              }, 3000);
+            } else if (errorMessage === 'Требуется авторизация') {
+              setError("Для отправки формы необходимо авторизоваться");
+              setTimeout(() => {
+                window.location.href = '/auth/login';
+              }, 3000);
+            } else {
+              setError(errorMessage);
+            }
+          }
+      };
 
 
     return (

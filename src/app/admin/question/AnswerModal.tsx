@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { X } from "lucide-react"
 import Image from "next/image";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface FaqProfileCardType {
     name: string;
@@ -35,6 +36,7 @@ const AnswerModal = ({
             await api.answerQuestion(token, questionId, input)
             onAnswer()
             close()
+            toast.success('Ответ успешно сохранен')
         } catch (error) {
             console.error("Error submitting answer:", error)
             alert(error instanceof Error ? error.message : "Unknown error")

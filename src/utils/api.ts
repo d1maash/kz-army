@@ -381,74 +381,52 @@ export const api = {
 
     // Вопросы для сотрудников
     createQuestion: async (formData: FormData) => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/auth/login';
-            throw new Error('Требуется авторизация');
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        
+        const headers = new Headers();
+        if (token) {
+          headers.append('Authorization', `Bearer ${token}`);
         }
+      
         const response = await fetch(`${BASE_URL}/questions/questions/`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
-        })
-
+          method: 'POST',
+          headers: headers,
+          body: formData
+        });
+      
         if (!response.ok) {
-            throw new Error("Error posting question")
+          const errorData = await response.json();
+          throw new Error(errorData.detail || "Error posting question");
         }
-        return response.json()
-    },
+        return response.json();
+      },
 
     // Добавляем новый метод для создания заявки
     createCommunication: async (formData: FormData) => {
         const token = localStorage.getItem('token');
         if (!token) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/auth/login';
-            throw new Error('Требуется авторизация');
+          throw new Error('Требуется авторизация');
         }
-
+      
         const response = await fetch(`${BASE_URL}/applications/applications/communications/`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData,
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
         });
-
+      
         if (response.status === 401) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/auth/login';
-            throw new Error('Сессия истекла');
+          throw new Error('Сессия истекла');
         }
-
-        const data = await response.json();
-
+      
         if (!response.ok) {
-            let errorMessage = 'Ошибка при выполнении запроса';
-
-            if (data.detail) {
-                errorMessage = data.detail;
-            } else if (data.files) {
-                errorMessage = data.files.join(', ');
-            } else if (typeof data === 'object') {
-                errorMessage = Object.entries(data)
-                    .map(([field, errors]) =>
-                        `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`
-                    )
-                    .join('\n');
-            }
-
-            throw new Error(errorMessage);
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Ошибка при создании заявки');
         }
-
-        return data;
-    },
+      
+        return response.json();
+      },
 
     // Получение статуса заявки пользователя
     getUserApplicationStatus: async (applicationId: string) => {
@@ -491,6 +469,10 @@ export const api = {
                 'Authorization': `Bearer ${token}`,
             },
         });
+        
+        if (response.status === 401) {
+            throw new Error('Сессия истекла');
+        }
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки заявок');

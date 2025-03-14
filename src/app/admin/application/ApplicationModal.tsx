@@ -1,20 +1,55 @@
-import { X } from "lucide-react";
+"use client"
+
+import { X, MoreVertical } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { ApplicationType } from './types';
+import toast from "react-hot-toast";
 
 interface ApplicationDetailsModalProps {
     isOpen: boolean;
     onClose: () => void;
     application: ApplicationType;
+    onStatusChange: (id: number, status: string) => Promise<void>;
+    onDelete: (id: number) => Promise<void>;
 }
 
 const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
     isOpen,
     onClose,
     application,
+    onStatusChange,
+    onDelete
 }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
     if (!isOpen) return null;
+
+    const handleStatusChange = async (newStatus: string) => {
+        try {
+            await onStatusChange(application.id, newStatus);
+            onClose();
+            toast.success('Статус заявки успешно изменен');
+        } catch (error) {
+            console.error('Failed to update status:', error);
+            toast.error('Ошибка при изменении статуса заявки');
+        }
+    };
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm('Вы уверены, что хотите удалить эту заявку?');
+        if (confirmDelete) {
+            try {
+                await onDelete(application.id);
+                onClose();
+                toast.success('Заявка успешно удалена');
+            } catch (error) {
+                console.error('Failed to delete application:', error);
+                toast.error('Ошибка при удалении заявки');
+            }
+        }
+    };
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -31,6 +66,41 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
                         <h3><strong>{application.full_name}</strong></h3>
                         <p>{application.application_type === "conscription" ? "Срочная служба" : "Связист"}</p>
                     </div>
+                    <div className="relative">
+                        <MoreVertical 
+                            className="cursor-pointer"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        />
+                        {isDropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                <button
+                                    onClick={() => handleStatusChange('in_review')}
+                                    className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                                >
+                                    В обработке
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange('approved')}
+                                    className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                                >
+                                    Одобрена
+                                </button>
+                                <button
+                                    onClick={() => handleStatusChange('rejected')}
+                                    className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                                >
+                                    Отклонена
+                                </button>
+                                <button
+                                    onClick={handleDelete}
+                                    className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50"
+                                >
+                                    Удалить заявку
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
                 </div>
 
                 <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm">

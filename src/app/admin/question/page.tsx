@@ -16,6 +16,7 @@ interface Question {
   id: number;
   question_text: string;
   user_full_name: string;
+  user_name: string;
   profile_name: string;
   answer: string;
   status: string;
@@ -125,6 +126,7 @@ const AdminQuestion = () => {
             key={question.id}
             id={question.id}
             name={question.user_full_name}
+            user_name={question.user_name}
             profile={question.profile_name}
             question={question.question_text}
             answer={question.answer}

@@ -6,8 +6,24 @@ import Navbar from "@/components/Navbar"
 import Image from "next/image"
 import Link from "next/link"
 import Footer from "@/components/Footer"
+import { useEffect, useRef } from "react"
+import toast from "react-hot-toast"
 
 const Application = () => {
+    // Check if user is authenticated
+    const hasShownToast = useRef(false)
+
+    // Check if user is authenticated
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        if (!token && !hasShownToast.current) {
+            hasShownToast.current = true
+            toast.error("Требуется авторизация", {
+                position: "top-center",
+                duration: 4000,
+            })
+        }
+    }, [])
 
     return (
         <>

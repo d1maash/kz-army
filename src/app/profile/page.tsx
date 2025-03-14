@@ -64,11 +64,6 @@ const ProfilePage = () => {
                 })
                 .catch(error => {
                     console.error('Error fetching profile:', error)
-                    if (error.message === 'Сессия истекла') {
-                        localStorage.removeItem('token')
-                        localStorage.removeItem('user')
-                        router.push('/auth/login')
-                    }
                 })
                 .finally(() => {
                     setLoading(false);
@@ -80,13 +75,27 @@ const ProfilePage = () => {
         const fetchApplicationStatus = async () => {
             try {
                 const applications = await api.getUserApplications();
-                setApplicationStatus(applications as ApplicationStatus[])   
-            } catch (err) {
-                console.error(err)
+                setApplicationStatus(applications);
+            } catch (error) {
+                // Proper error type handling
+                if (error instanceof Error) {
+                    if (error.message === 'Сессия истекла') {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        router.push('/auth/login');
+                    } else {
+                        console.error("Ошибка загрузки заявок:", error.message);
+                    }
+                } else {
+                    console.error("Неизвестная ошибка:", error);
+                }
             }
+        };
+    
+        if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+            fetchApplicationStatus();
         }
-        fetchApplicationStatus()
-    }, [])
+    }, [router]);
     // console.log(applicationStatus)
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {

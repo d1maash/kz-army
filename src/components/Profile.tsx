@@ -27,7 +27,7 @@ const Profile = ({ isLeft, onLogout }: {isLeft?: boolean; onLogout: () => void})
                 setUserData(profile);
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
-                onLogout()
+                // onLogout()
             }
         };
 
@@ -38,7 +38,7 @@ const Profile = ({ isLeft, onLogout }: {isLeft?: boolean; onLogout: () => void})
         localStorage.removeItem("token");
         localStorage.removeItem("is_admin");
         onLogout()
-        router.push("/auth/login");
+        router.push("/");
     };
 
     if (!userData) return null; // Чтобы не рендерить, пока данные не загружены

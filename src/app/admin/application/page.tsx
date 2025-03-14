@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { ApplicationType } from "./types";
+import toast from "react-hot-toast";
 
 const AdminApplication = () => {
   // Modal state
@@ -126,8 +127,10 @@ const AdminApplication = () => {
       setAllApplications((prev) =>
         prev.map((app) => (app.id === id ? { ...app, status: newStatus } : app))
       );
+      toast.success('Статус заявки успешно изменен')
     } catch (error) {
       console.error(error);
+      toast.error('Ошибка при изменении статуса заявки')
     }
   };
 
@@ -136,8 +139,10 @@ const AdminApplication = () => {
     try {
       await api.deleteApplicationById(id);
       setAllApplications((prev) => prev.filter((app) => app.id !== id));
+      toast.success('Заявка успешно удалена')
     } catch (error) {
       console.error("Error deleting application:", error);
+      toast.error('Ошибка при удалении заявки')
     }
   };
 
@@ -285,6 +290,8 @@ const AdminApplication = () => {
           isOpen={isModalOpen}
           onClose={closeModal}
           application={selectedApplication}
+          onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
         />
       )}
     </div>
