@@ -16,6 +16,7 @@ import Image from "next/image"
 import Loader from "@/components/Loader"
 import StatusCard from "@/components/StatusCard";
 import Footer from "@/components/Footer";
+import toast from "react-hot-toast";
 
 interface UserData {
     full_name?: string;
@@ -142,10 +143,12 @@ const ProfilePage = () => {
             const updatedData = await api.updateProfile(dataToSend)
             setUserData(updatedData)
             setIsEditing(false)
+            toast.success('Профиль успешно изменен')
         } catch (error) {
             const err = error as Error;
             setErrorMessage(err.message || 'Ошибка при сохранении изменений')
             console.error('Update error:', err)
+            toast.error('Ошибка при сохранении изменений')
         }
     }
 

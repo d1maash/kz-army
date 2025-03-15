@@ -8,10 +8,12 @@ import Link from "next/link"
 import Footer from "@/components/Footer"
 import { useEffect, useRef } from "react"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 const Application = () => {
     // Check if user is authenticated
     const hasShownToast = useRef(false)
+    const router = useRouter()
 
     // Check if user is authenticated
     useEffect(() => {
@@ -22,6 +24,7 @@ const Application = () => {
                 position: "top-center",
                 duration: 4000,
             })
+            router.push("/auth/login")
         }
     }, [])
 

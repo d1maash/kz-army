@@ -88,8 +88,8 @@ export const api = {
 
         if (response.status === 401) {
             // Убираем автоматическое перенаправление и очистку localStorage
-            // localStorage.removeItem('token');
-            // localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
             // window.location.href = '/auth/login';
             throw new Error('Сессия истекла');
         }

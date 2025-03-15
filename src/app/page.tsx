@@ -1,5 +1,6 @@
 "use client"
 
+import ApplicationCard from "@/components/ApplicationCard";
 import CourseCard from "@/components/CourseCard";
 import CourseModal from "@/components/CourseModal";
 import Footer from "@/components/Footer";
@@ -11,6 +12,7 @@ import ServiceCard from "@/components/ServiceCard";
 import ServiceFieldCard from "@/components/ServiceFieldCard";
 import ServiceFieldModal from "@/components/ServiceFieldModal";
 import StepCard from "@/components/StepCard";
+import { applicationData } from "@/store/applicationCards";
 import { courseCards } from "@/store/courseCards";
 import { importantCards } from "@/store/importantCards";
 import { serviceFieldCards } from "@/store/serviceFieldCards";
@@ -78,9 +80,9 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Курсы для военнослужащих */}
+            {/* Подготовка Военнослужащих */}
             <div className="container mx-auto md:px-20 mt-20 md:mt-28">
-                <h2 className="text-4xl md:text-5xl text-center font-bold mt-5">Курсы для военнослужащих</h2>
+                <h2 className="text-4xl md:text-5xl text-center font-bold mt-5">Подготовка Военнослужащих</h2>
                 <div className="mt-10 mx-5 md:mx-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">
                     {courseCards.map((card) => (
                         <CourseCard 
@@ -140,6 +142,16 @@ export default function Home() {
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
+                    
+                    {/* Заявки */}
+                    {applicationData.map((application, index) => (
+                        <ApplicationCard 
+                            key={index}
+                            application={application}
+                        />
+                    ))}
+
+                    {/* Статьи */}
                     {error && <p>{error}</p>}
                     {articles.slice(0, 4).map((article) => (
                         <ServiceCard

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 interface UserData {
     first_name: string;
@@ -39,6 +40,7 @@ const Profile = ({ isLeft, onLogout }: {isLeft?: boolean; onLogout: () => void})
         localStorage.removeItem("is_admin");
         onLogout()
         router.push("/");
+        toast.success('Вы успешно вышли из аккаунта')
     };
 
     if (!userData) return null; // Чтобы не рендерить, пока данные не загружены

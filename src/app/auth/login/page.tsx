@@ -8,6 +8,7 @@ import { api } from "@/utils/api";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import "../auth.css"
+import toast from "react-hot-toast";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -43,9 +44,11 @@ const Login = () => {
             } else {
                 // Redirect to the user's personal account page
                 router.push('/profile'); // Change this to the correct user profile page if different
+                toast.success('Авторизация прошла успешно')
             }
         } catch (err) {
             console.error(err)
+            toast.error('Ошибка авторизации')
         }
     }
 
