@@ -90,6 +90,7 @@ export const api = {
             // Убираем автоматическое перенаправление и очистку localStorage
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+            localStorage.removeItem('is_admin');
             // window.location.href = '/auth/login';
             throw new Error('Сессия истекла');
         }

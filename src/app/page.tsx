@@ -1,60 +1,27 @@
 "use client"
 
+import AdvantageCard from "@/components/AdvantageCard";
 import ApplicationCard from "@/components/ApplicationCard";
 import CourseCard from "@/components/CourseCard";
 import CourseModal from "@/components/CourseModal";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/Hero";
 import ImportantCard from "@/components/ImportantCard";
-import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
-import ServiceCard from "@/components/ServiceCard";
 import ServiceFieldCard from "@/components/ServiceFieldCard";
 import ServiceFieldModal from "@/components/ServiceFieldModal";
 import StepCard from "@/components/StepCard";
+import { advantagesCards } from "@/store/advantagesCards";
 import { applicationData } from "@/store/applicationCards";
 import { courseCards } from "@/store/courseCards";
 import { importantCards } from "@/store/importantCards";
 import { serviceFieldCards } from "@/store/serviceFieldCards";
 import { stepCards } from "@/store/stepCards";
-import { api } from "@/utils/api";
-import { useEffect, useState } from "react";
-
-interface Article {
-    id: number;
-    title: string;
-    short_description: string;
-    content: string;
-    category: string;
-    published_date: string;
-    main_photo: string;
-}
+import { useState } from "react";
 
 export default function Home() {
-    const [articles, setArticles] = useState<Article[]>([]) // Store all articles
-    const [loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | null>(null)
     const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
     const [selectedServiceField, setSelectedServiceField] = useState<number | null>(null)
-
-    useEffect(() => {
-        const fetchArticles = async () => {
-            try {
-                const data = await api.getArticles()
-                // console.log(data)
-                setArticles(data.results) // Store the full list
-            } catch (error) {
-                const err = error as Error; // Приведение типа
-                setError(err.message || "Ошибка загрузки")
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchArticles()
-    }, [])
-
-    if (loading) return <Loader />
 
     return (
         <div>
@@ -65,7 +32,7 @@ export default function Home() {
             <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
-                <h2 className="text-4xl md:text-5xl font-bold mt-5">Служба в 78460 военном участке</h2>
+                <h2 className="text-4xl md:text-5xl font-bold mt-5">Войнская часть 78460</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Присоединяйтесь к 78460 военной участке и получите не только бесценный военный опыт, но и востребованные навыки, которые пригодятся вам в жизни и карьере.</p>
             
                 {/* Service Cards */}
@@ -114,26 +81,6 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Как подать заявку? */}
-            <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
-                {/* Line */}
-                <div className="lg:w-1/2 lg:mx-auto lg:pl-16">
-                    <div className="border-t-[12px] border-custom-yellow w-1/3"></div>
-                    <h2 className="text-4xl md:text-5xl font-bold mt-5 ">Как подать заявку?</h2>
-                </div>
-
-                {/* Steps Cards */}
-                <div className="mt-20 grid lg:grid-cols-2 max-w-4xl mx-auto justify-center items-center gap-10">
-                    {stepCards.map((card) => (
-                        <StepCard
-                            key={card.id}
-                            title={card.title}
-                            description={card.description}
-                            image={card.image}
-                        />
-                    ))}
-                </div>
-            </div>
 
             {/* Преимущество службы */}
             <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
@@ -152,11 +99,38 @@ export default function Home() {
                     ))}
 
                     {/* Статьи */}
-                    {error && <p>{error}</p>}
+                    {advantagesCards.map((advantage, index) => (
+                        <AdvantageCard 
+                            key={index}
+                            advantage={advantage}
+                        />
+                    ))}
+                    {/* {error && <p>{error}</p>}
                     {articles.slice(0, 4).map((article) => (
                         <ServiceCard
                             key={article.id}
                             article={article}
+                        />
+                    ))} */}
+                </div>
+            </div>
+
+            {/* Как подать заявку? */}
+            <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
+                {/* Line */}
+                <div className="lg:w-1/2 lg:mx-auto lg:pl-16">
+                    <div className="border-t-[12px] border-custom-yellow w-1/3"></div>
+                    <h2 className="text-4xl md:text-5xl font-bold mt-5 ">Как подать заявку?</h2>
+                </div>
+
+                {/* Steps Cards */}
+                <div className="mt-20 grid lg:grid-cols-2 max-w-4xl mx-auto justify-center items-center gap-10">
+                    {stepCards.map((card) => (
+                        <StepCard
+                            key={card.id}
+                            title={card.title}
+                            description={card.description}
+                            image={card.image}
                         />
                     ))}
                 </div>
