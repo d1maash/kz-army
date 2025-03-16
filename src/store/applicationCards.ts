@@ -4,6 +4,7 @@ export type ApplicationCardType = {
     benefits: string[];
     imageSrc: string;
     link: string;
+    type: 'conscription' | 'communication';
   };
   
   export const applicationData: ApplicationCardType[] = [
@@ -17,7 +18,8 @@ export type ApplicationCardType = {
         "После службы можно получить образовательные и социальные преимущества.",
       ],
       imageSrc: "/conscription-card.png",
-      link: '/application/conscription'
+      link: '/application/conscription',
+      type: 'conscription',
     },
     {
       title: "Контрактная служба",
@@ -29,6 +31,7 @@ export type ApplicationCardType = {
         "Освоение военной профессии и получение полезных навыков.",
       ],
       imageSrc: "/communication-card.png",
-      link: '/application/communication'
+      link: '/application/communication',
+      type: 'communication',
     },
   ];

@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 import ServiceFieldCard from "@/components/ServiceFieldCard";
 import ServiceFieldModal from "@/components/ServiceFieldModal";
 import StepCard from "@/components/StepCard";
-import { advantagesCards } from "@/store/advantagesCards";
+import { conscriptionAdvantagesCards, communicationAdvantageCards } from "@/store/advantagesCards";
 import { applicationData } from "@/store/applicationCards";
 import { courseCards } from "@/store/courseCards";
 import { importantCards } from "@/store/importantCards";
@@ -22,6 +22,7 @@ import { useState } from "react";
 export default function Home() {
     const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
     const [selectedServiceField, setSelectedServiceField] = useState<number | null>(null)
+    const [selectedApplication, setSelectedApplication] = useState<"conscription" | 'communication' | null>(null)
 
     return (
         <div>
@@ -88,31 +89,37 @@ export default function Home() {
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
-                <div className="mt-20 grid lg:grid-cols-2  justify-center items-center gap-10">
-                    
-                    {/* Заявки */}
-                    {applicationData.map((application, index) => (
+                <div className="mt-20 grid lg:grid-cols-2 justify-center items-center gap-10">
+                    {/* Application Cards */}
+                    {applicationData.map((application) => (
                         <ApplicationCard 
-                            key={index}
-                            application={application}
+                        key={application.type}
+                        application={application}
+                        isSelected={selectedApplication === application.type}
+                        onClick={() => {
+                            setSelectedApplication(prev => 
+                            prev === application.type ? null : application.type
+                            );
+                        }}
                         />
                     ))}
 
-                    {/* Статьи */}
-                    {advantagesCards.map((advantage, index) => (
+                    {/* Conscription Advantages */}
+                    {selectedApplication === 'conscription' && conscriptionAdvantagesCards.map((advantage, index) => (
                         <AdvantageCard 
-                            key={index}
-                            advantage={advantage}
+                        key={index}
+                        advantage={advantage}
                         />
                     ))}
-                    {/* {error && <p>{error}</p>}
-                    {articles.slice(0, 4).map((article) => (
-                        <ServiceCard
-                            key={article.id}
-                            article={article}
+
+                    {/* Communication Advantages */}
+                    {selectedApplication === 'communication' && communicationAdvantageCards.map((advantage, index) => (
+                        <AdvantageCard 
+                        key={index}
+                        advantage={advantage}
                         />
-                    ))} */}
-                </div>
+                    ))}
+                    </div>
             </div>
 
             {/* Как подать заявку? */}

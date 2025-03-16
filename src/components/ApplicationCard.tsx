@@ -1,10 +1,20 @@
 import Image from "next/image";
 import { ApplicationCardType } from "@/store/applicationCards";
-import Link from "next/link";
 
-const ApplicationCard = ({ application }: { application: ApplicationCardType }) => {
+const ApplicationCard = ({ 
+  application, 
+  isSelected, 
+  onClick 
+  }: { 
+    application: ApplicationCardType; 
+    isSelected: boolean;
+    onClick: () => void;
+  }) => {
   return (
-    <Link href={application.link} className="flex items-center  gap-3 p-5 py-7 bg-[#F1EFEF] hover:bg-custom-yellow transition duration-300 ease-in-out rounded-xl overflow-hidden">
+    <div 
+      onClick={onClick}
+      className={`${isSelected ? "bg-custom-yellow" : "bg-[#F1EFEF]"} flex items-center gap-3 p-5 py-7 hover:bg-custom-yellow transition duration-300 ease-in-out rounded-xl overflow-hidden`}
+    >
       <div className="flex flex-col flex-1">
         <h3 className="text-xl font-medium">{application.title}</h3>
         <p className="text-sm text-black/50">Срок службы: {application.duration}</p>
@@ -34,7 +44,7 @@ const ApplicationCard = ({ application }: { application: ApplicationCardType }) 
           className=""
         />
       </div>
-    </Link>
+    </div>
   );
 };
 
