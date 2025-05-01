@@ -33,8 +33,8 @@ export default function Home() {
             <div className="container mx-auto px-5 md:px-20 mt-20 md:mt-28">
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
-                <h2 className="text-4xl md:text-5xl font-bold mt-5">Войнская часть 78460</h2>
-                <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Присоединяйтесь к 78460 военной участке и получите не только бесценный военный опыт, но и востребованные навыки, которые пригодятся вам в жизни и карьере.</p>
+                <h2 className="text-4xl md:text-5xl font-bold mt-5">Войсковая часть 78460</h2>
+                <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Присоединяйтесь к 78460 войсковой части и получите не только бесценный военный опыт, но и востребованные навыки, которые пригодятся вам в жизни и карьере.</p>
             
                 {/* Service Cards */}
                 <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">

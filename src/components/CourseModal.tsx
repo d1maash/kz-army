@@ -62,7 +62,7 @@ const CourseModal: FC<CourseModalProps> = ({ card, onClose }) => {
 
         <div className="p-6 flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <h3 className="font-bold text-xl">{card.title} в военной части 78460</h3>
+            <h3 className="font-bold text-xl">{card.title} в войсковой части 78460</h3>
             <p className="text-sm">{card.intro}</p>
           </div>
 
