@@ -1,4 +1,4 @@
-const BASE_URL = 'http://myarmy.kz/api';
+const BASE_URL = 'https://api.myarmy.kz/';
 
 // interface Article {
 //     id: number;
@@ -318,13 +318,13 @@ export const api = {
     getArticles: async (page: number = 1, pageSize: number = 6) => {
         try {
             const response = await fetch(
-                `${BASE_URL}/articles/?page=${page}&page_size=${pageSize}`, 
+                `${BASE_URL}/articles/?page=${page}&page_size=${pageSize}`,
                 { method: 'GET' }
             );
-            
+
             const data = await response.json();
             if (!response.ok) throw new Error(data.detail || 'Ошибка загрузки статей');
-            
+
             return {
                 results: data.results,
                 count: data.count // Total number of items
@@ -383,51 +383,51 @@ export const api = {
     // Вопросы для сотрудников
     createQuestion: async (formData: FormData) => {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-        
+
         const headers = new Headers();
         if (token) {
-          headers.append('Authorization', `Bearer ${token}`);
+            headers.append('Authorization', `Bearer ${token}`);
         }
-      
+
         const response = await fetch(`${BASE_URL}/questions/questions/`, {
-          method: 'POST',
-          headers: headers,
-          body: formData
+            method: 'POST',
+            headers: headers,
+            body: formData
         });
-      
+
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || "Error posting question");
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Error posting question");
         }
         return response.json();
-      },
+    },
 
     // Добавляем новый метод для создания заявки
     createCommunication: async (formData: FormData) => {
         const token = localStorage.getItem('token');
         if (!token) {
-          throw new Error('Требуется авторизация');
+            throw new Error('Требуется авторизация');
         }
-      
+
         const response = await fetch(`${BASE_URL}/applications/applications/communications/`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: formData,
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
         });
-      
+
         if (response.status === 401) {
-          throw new Error('Сессия истекла');
+            throw new Error('Сессия истекла');
         }
-      
+
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Ошибка при создании заявки');
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Ошибка при создании заявки');
         }
-      
+
         return response.json();
-      },
+    },
 
     // Получение статуса заявки пользователя
     getUserApplicationStatus: async (applicationId: string) => {
@@ -470,7 +470,7 @@ export const api = {
                 'Authorization': `Bearer ${token}`,
             },
         });
-        
+
         if (response.status === 401) {
             throw new Error('Сессия истекла');
         }
