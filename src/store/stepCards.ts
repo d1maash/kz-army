@@ -2,7 +2,7 @@ export const stepCards = [
     {
         id: 1,
         title: 'Выберите программу',
-        description: '(Контракт, Волонтёрство, Альтернативная служба)',
+        description: '(Срочная служба, Контрактная служба)',
         image: './icons/shield.svg',       
     },
     {

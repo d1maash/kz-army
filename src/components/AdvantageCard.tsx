@@ -4,7 +4,7 @@ import { AdvantageCardType } from "@/store/advantagesCards";
 
 const AdvantageCard = ({ advantage }: { advantage: AdvantageCardType }) => {
     return (
-        <div className="min-h-80 transition duration-300 ease-in-out hover:bg-custom-yellow flex flex-col rounded-xl overflow-hidden bg-[#F1EFEF]">
+        <div className="min-h-[430px] transition duration-300 ease-in-out hover:bg-custom-yellow flex flex-col rounded-xl overflow-hidden bg-[#F1EFEF]">
             <Image
                 src={advantage.image || "/services/service-1.png"}
                 alt={advantage.title}
