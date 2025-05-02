@@ -17,5 +17,20 @@
 - [ ] Обновить фотографии в разделе "Современная подготовка"
 - [ ] Заменить фотографии согласно комментариям
 
+## Исправления кода
+
+### ESLint Warnings (React Hooks)
+- [ ] `./src/app/admin/page.tsx`: Добавить `handleApplications` в зависимости useEffect
+- [ ] `./src/app/application/communication/page.tsx`: Добавить `formData` в зависимости useEffect
+- [ ] `./src/app/application/page.tsx`: Добавить `router` в зависимости useEffect
+- [ ] `./src/app/article/page.tsx`: Добавить `router` и `searchParams` в зависимости useEffect
+
+### ESLint Errors
+- [ ] `./src/app/application/conscription/page.tsx`: 
+  - Удалить неиспользуемую переменную `profile`
+  - Заменить тип `any` на конкретный тип
+- [ ] `./src/app/auth/register/page.tsx`: Заменить тип `any` на конкретный тип
+- [ ] `./src/utils/api.ts`: Заменить типы `any` на конкретные типы
+
 ## В процессе
 - Дополнительные задачи будут добавлены по мере необходимости

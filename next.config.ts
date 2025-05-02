@@ -1,5 +1,9 @@
 import type { NextConfig } from "next";
-module.exports = {
+
+const nextConfig: NextConfig = {
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     images: {
         remotePatterns: [
             {
@@ -8,14 +12,6 @@ module.exports = {
                 pathname: '/media/**',
             },
         ],
-    },
-}
-const nextConfig: NextConfig = {
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
-    images: {
-        domains: ['89.46.33.188']
     },
     async rewrites() {
         return [
