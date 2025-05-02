@@ -1,5 +1,15 @@
 import type { NextConfig } from "next";
-
+module.exports = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'api.myarmy.kz',
+                pathname: '/media/**',
+            },
+        ],
+    },
+}
 const nextConfig: NextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
