@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.myarmy.kz';
+const BASE_URL = 'https://api.myarmy.kz/api';
 
 // interface Article {
 //     id: number;
