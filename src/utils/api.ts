@@ -421,6 +421,10 @@ export const api = {
             throw new Error('Сессия истекла');
         }
 
+        if (response.status === 409) {
+            throw new Error('У вас уже есть активная заявка');
+        }
+
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.detail || 'Ошибка при создании заявки');
