@@ -44,7 +44,7 @@ const AskQuestion = () => {
             <div className="container mx-auto px-5 mt-20 md:mt-28 flex-grow">
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <h2 className="text-3xl md:text-4xl font-bold mt-5">
-                    Вопросы представителям министерства обороны
+                    Вопросы к представителям войсковой части
                 </h2>
 
                 <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">

@@ -8,6 +8,7 @@ import { api } from "@/utils/api"
 import { useRouter } from "next/navigation"
 import Footer from "@/components/Footer"
 import "../auth.css"
+import toast from "react-hot-toast"
 
 const Register = () => {
     const router = useRouter()
@@ -38,6 +39,7 @@ const Register = () => {
 
             if (response.id) {
                 console.log("Redirecting to profile...");
+                toast.success('Регистрация прошла успешно!')
                 setTimeout(() => {
                     router.push("/profile")
                 }, 1000);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Фоновый круг -->
+    <circle cx="200" cy="200" r="180" fill="#FFE600" fill-opacity="0.1"/>
+    
+    <!-- Элементы дизайна -->
+    <path d="M140 140L260 260" stroke="#FFE600" stroke-width="20" stroke-linecap="round"/>
+    <path d="M260 140L140 260" stroke="#FFE600" stroke-width="20" stroke-linecap="round"/>
+    
+    <!-- Декоративные элементы -->
+    <circle cx="320" cy="100" r="15" fill="#FFE600"/>
+    <circle cx="80" cy="300" r="10" fill="#FFE600"/>
+    <circle cx="350" cy="250" r="8" fill="#FFE600"/>
+    <circle cx="50" cy="150" r="12" fill="#FFE600"/>
+    
+    <!-- Пунктирная линия -->
+    <path d="M100 50C150 80 250 80 300 50" stroke="#FFE600" stroke-width="4" stroke-dasharray="8 8"/>
+    <path d="M300 350C250 320 150 320 100 350" stroke="#FFE600" stroke-width="4" stroke-dasharray="8 8"/>
+</svg> 
