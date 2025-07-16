@@ -32,7 +32,7 @@ const Application = () => {
         <>
             <Navbar />
             <div className="container mx-auto px-5 mt-20 md:mt-28 flex flex-col min-h-[50vh]">
-                <div className="w-full p-10 md:w-1/2 lg:w-2/5 mx-auto flex flex-col items-center text-center">
+                {/* <div className="w-full p-10 md:w-1/2 lg:w-2/5 mx-auto flex flex-col items-center text-center">
                     <h3 className="text-2xl font-bold">Подача заявки на службу</h3>
                     <p className="text-[#7D7D7D] mt-2">Выберите один из вариантов.</p>
 
@@ -64,6 +64,11 @@ const Application = () => {
                         </div>
 
                     </div>
+                </div> */}
+
+                <div className="w-full p-10 md:w-1/2 lg:w-2/5 mx-auto flex flex-col items-center text-center bg-gray-200 rounded-xl opacity-70 cursor-not-allowed">
+                    <h3 className="text-2xl font-bold text-gray-500">Подача заявок временно недоступна</h3>
+                    <p className="text-[#A0A0A0] mt-4 text-lg">Функционал подачи заявки находится в разработке.<br/>Пожалуйста, следите за обновлениями!</p>
                 </div>
             </div>
             <Footer />
