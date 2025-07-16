@@ -22,8 +22,8 @@ const ServiceCard = ({ article }: { article: Article }) => {
                 className="w-full h-48 object-cover"
             />
             <div className="flex flex-col p-5 gap-2">
-                <h3 className="font-bold text-lg">{article.title}</h3>
-                <p className="text-sm">{article.short_description || article.content}</p>
+                <h3 className="font-bold text-lg line-clamp-2">{article.title}</h3>
+                <p className="text-sm line-clamp-3">{article.short_description || article.content}</p>
                 {article.published_date &&
                     <p className="text-[#7D7D7D] text-sm">Дата публикации: {new Date(article?.published_date).toLocaleDateString("ru-RU")}</p>
                 }

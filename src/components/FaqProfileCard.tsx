@@ -34,8 +34,8 @@ const FaqProfileCard: React.FC<FaqProfileCardProps> = ({ id, name, role, image, 
             height={200} 
             className="w-full h-auto object-cover rounded-full" 
           />
-          <h3 className="mt-3 text-center font-bold text-lg">{name}</h3>
-          <p className="text-center font-medium">{role}</p>
+          <h3 className="mt-3 text-center font-bold text-lg line-clamp-2">{name}</h3>
+          <p className="text-center font-medium line-clamp-3">{role}</p>
         </Link>
         <button
           onClick={() => setIsModalOpen(true)}

@@ -67,7 +67,7 @@ export default function Home() {
                 {/* Line */}
                 <div className="border-t-[12px] border-custom-yellow w-1/5"></div>
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Почему это важно?</h2>
-                <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Министерство Обороны предоставляет возможность каждому гражданину внести свой вклад в защиту Родины. Подайте заявку на участие в военных, контрактных и волонтёрских программах.</p>
+                <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Министерство Обороны предоставляет возможность каждому гражданину внести свой вклад в защиту Родины. Подайте заявку на участие в военных и контрактных программах.</p>
 
                 {/* Cards */}
                 <div className="mt-10 flex justify-center gap-5 items-center flex-wrap lg:flex-nowrap">
