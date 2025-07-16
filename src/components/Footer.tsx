@@ -1,3 +1,4 @@
+import { Youtube } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -29,14 +30,32 @@ const Footer = () => {
                             />
                             @armykz_bot
                         </Link>
-                        <Link href="" className="flex gap-1 items-center text-sm">
+                        <Link target="_blank" href="https://www.instagram.com/sarbazpluskz/" className="flex gap-1 items-center text-sm">
                             <Image
                                 src="/icons/instagram.svg"
                                 alt="telegram"
                                 width={20}
                                 height={20}
                             />
-                            @username
+                            @sarbazpluskz
+                        </Link>
+                        <Link target="_blank" href="https://www.youtube.com/@sarbazplus" className="flex gap-1 items-center text-sm">
+                        <Image
+                                src="/icons/youtube.svg"
+                                alt="telegram"
+                                width={20}
+                                height={20}
+                            />
+                            @SARBAZ+
+                        </Link>
+                        <Link target="_blank" href="https://www.tiktok.com/@sarbazplus?_t=ZM-8y2e7YrN5fU&_r=1" className="flex gap-1 items-center text-sm">
+                            <Image
+                                src="/icons/tiktok.svg"
+                                alt="telegram"
+                                width={20}
+                                height={20}
+                            />
+                            @sarbazplus
                         </Link>
                     </ul>
                 </div>
