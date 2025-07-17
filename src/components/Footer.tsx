@@ -13,9 +13,9 @@ const Footer = () => {
                     {/* Contacts */}
                     <ul className="flex flex-col gap-3">
                         <h3 className="font-bold">Наши контакты</h3>
-                        <li>+7 (778) 777 77 77</li>
-                        <li>+7 (777) 777 77 77</li>
-                        <li>+7 (775) 777 77 77</li>
+                        <li>+7 705 339 9391</li>
+                        <li>+7 700 745 9832</li>
+                        <li>+7 700 077 5575</li>
                     </ul>
 
                     {/* Social */}
