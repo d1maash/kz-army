@@ -8,7 +8,14 @@ const Footer = () => {
             <div className="container mx-auto px-5 md:px-20 py-5">
                 <div className="flex flex-wrap gap-20 text-white">
                     {/* Logo */}
-                    <Link href="/" className="font-bold text-lg">MY ARMY.KZ</Link>
+                    <Link href="/" className="font-bold text-lg">
+                        <Image 
+                            src="/new-logo.png"
+                            alt="logo"
+                            width={50}
+                            height={50}
+                        />
+                    </Link>
 
                     {/* Contacts */}
                     <ul className="flex flex-col gap-3">
