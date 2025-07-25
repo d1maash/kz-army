@@ -56,11 +56,23 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                 >
                     О программе
                 </Link>
-                <Link 
+                {/* <Link 
                     href="/application" 
                     className={`relative hover-link ${pathname === '/application' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
                 >
                     Подача заявки
+                </Link> */}
+                <Link 
+                    href="/conscription" 
+                    className={`relative hover-link ${pathname === '/conscription' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    Срочник
+                </Link>
+                <Link 
+                    href="/communication" 
+                    className={`relative hover-link ${pathname === '/communication' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
+                >
+                    Связист
                 </Link>
                 <Link 
                     href="/article" 
@@ -114,8 +126,14 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     <Link href="/" onClick={toggleMenu}>
                         О программе
                     </Link>
-                    <Link href="/application" onClick={toggleMenu}>
+                    {/* <Link href="/application" onClick={toggleMenu}>
                         Подача заявки
+                    </Link> */}
+                    <Link href="/conscription" onClick={toggleMenu}>
+                        Срочник
+                    </Link>
+                    <Link href="/communication" onClick={toggleMenu}>
+                        Связист
                     </Link>
                     <Link href="/article" onClick={toggleMenu}>
                         Статьи

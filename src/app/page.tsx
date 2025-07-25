@@ -90,36 +90,23 @@ export default function Home() {
                 <h2 className="text-4xl md:text-5xl font-bold mt-5">Преимущество службы</h2>
                 <p className="text-[#7D7D7D] text-sm mt-5 md:w-2/5">Служба в Министерстве Обороны — это стабильная зарплата, соцгарантии, льготное жильё и карьерный рост. Военнослужащие получают медобслуживание, раннюю пенсию и возможность обучения.</p>
                 <div className="mt-20 grid lg:grid-cols-2 justify-center items-center gap-10">
-                    {/* Application Cards */}
-                    {applicationData.map((application) => (
+                    {/* Conscription Card */}
+                    <a href="/conscription" className="block">
                         <ApplicationCard 
-                        key={application.type}
-                        application={application}
-                        isSelected={selectedApplication === application.type}
-                        onClick={() => {
-                            setSelectedApplication(prev => 
-                            prev === application.type ? null : application.type
-                            );
-                        }}
+                            application={applicationData.find(a => a.type === 'conscription')!}
+                            isSelected={false}
+                            onClick={() => {}}
                         />
-                    ))}
-
-                    {/* Conscription Advantages */}
-                    {selectedApplication === 'conscription' && conscriptionAdvantagesCards.map((advantage, index) => (
-                        <AdvantageCard 
-                        key={index}
-                        advantage={advantage}
+                    </a>
+                    {/* Communication Card */}
+                    <a href="/communication" className="block">
+                        <ApplicationCard 
+                            application={applicationData.find(a => a.type === 'communication')!}
+                            isSelected={false}
+                            onClick={() => {}}
                         />
-                    ))}
-
-                    {/* Communication Advantages */}
-                    {selectedApplication === 'communication' && communicationAdvantageCards.map((advantage, index) => (
-                        <AdvantageCard 
-                        key={index}
-                        advantage={advantage}
-                        />
-                    ))}
-                    </div>
+                    </a>
+                </div>
             </div>
 
             {/* Как подать заявку? */}

@@ -27,12 +27,20 @@ const HeroSection = () => {
             <div className="w-full mt-52 md:mt-60 container mx-auto px-5 flex flex-col items-center ">
                 <h1 className="text-4xl md:text-5xl md:text-[4rem] md:w-1/2 font-bold text-custom-yellow">Служить Родине — долг и честь</h1>
                 <p className="mt-4 text-base md:text-xl md:w-1/3">Подайте заявку на участие в программах Министерства Обороны</p>
+                <div className="flex items-center flex-wrap sm:flex-nowrap gap-4 mt-16">
                 <button
-                    className="mt-16 md:mt-40 w-full border border-custom-yellow text-custom-yellow px-6 py-2 rounded-md text-lg transition-colors duration-300 hover:bg-custom-yellow hover:text-black"
-                    onClick={handleButtonClick}
+                    className="w-full border border-custom-yellow text-custom-yellow px-6 py-2 rounded-md text-lg transition-colors duration-300 hover:bg-custom-yellow hover:text-black"
+                    onClick={() => router.push("/conscription")}
                 >
-                    Подать заявку
+                    Срочная служба
                 </button>
+                <button
+                    className="whitespace-nowrap w-full border border-custom-yellow text-custom-yellow px-6 py-2 rounded-md text-lg transition-colors duration-300 hover:bg-custom-yellow hover:text-black"
+                    onClick={() => router.push("/communication")}
+                >
+                    Контрактная служба
+                </button>
+                </div>
             </div>
         </section>
     );
