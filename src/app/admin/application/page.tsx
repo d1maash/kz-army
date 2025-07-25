@@ -195,7 +195,7 @@ const AdminApplication = () => {
                 </TableCell>
                 <TableCell>{new Date(item.submitted_at).toLocaleDateString("ru-RU")}</TableCell>
                 <TableCell>
-                  {item.application_type === "conscription" ? "Срочная служба" : "Связист"}
+                  {item.application_type === "conscription" ? "Срочная служба" : "Контрактник"}
                 </TableCell>
                 <TableCell>
                   <div className="relative inline-block">

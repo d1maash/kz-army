@@ -72,7 +72,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                     href="/communication" 
                     className={`relative hover-link ${pathname === '/communication' ? 'border-b-2 border-custom-yellow font-bold text-black' : ''}`}
                 >
-                    Связист
+                    Контрактник
                 </Link>
                 <Link 
                     href="/article" 
@@ -133,7 +133,7 @@ const Navbar = ({ isHome }: { isHome?: boolean }) => {
                         Срочник
                     </Link>
                     <Link href="/communication" onClick={toggleMenu}>
-                        Связист
+                        Контрактник
                     </Link>
                     <Link href="/article" onClick={toggleMenu}>
                         Статьи

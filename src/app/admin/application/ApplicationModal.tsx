@@ -64,7 +64,7 @@ const ApplicationDetailsModal: React.FC<ApplicationDetailsModalProps> = ({
                     />
                     <div className="flex flex-col justify-center">
                         <h3><strong>{application.full_name}</strong></h3>
-                        <p>{application.application_type === "conscription" ? "Срочная служба" : "Связист"}</p>
+                        <p>{application.application_type === "conscription" ? "Срочная служба" : "Контрактник"}</p>
                     </div>
                     <div className="relative">
                         <MoreVertical 
